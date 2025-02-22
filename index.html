@@ -60,6 +60,13 @@
             cursor: pointer;
             font-size: 16px;
         }
+        .focusButton {
+            background-color: #ff9900;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 16px;
+        }
         #loginModal {
             display: none;
             position: fixed;
@@ -76,11 +83,6 @@
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-        }
-        iframe {
-            border: none;
-            width: 100%;
-            height: 300px;
         }
     </style>
 </head>
@@ -138,6 +140,8 @@
         <button class="sideButton">💰 המרת מטבע</button>
         <button class="sideButton">✈️ חיפוש טיסות</button>
         <button class="sideButton">🔑 התחבר</button>
+        <button class="focusButton" onclick="toggleFocusMode()">🎯 מצב ריכוז</button>
+        <button class="focusButton" onclick="toggleLargerText()">🔠 טקסט גדול יותר</button>
     </div>
 
     <!-- Script -->
@@ -232,6 +236,17 @@
                     <li>טיסה 2: שעה 12:00, מחיר: 700 ש"ח</li>
                 </ul>
             `;
+        }
+
+        // Toggle Focus Mode (simplified)
+        function toggleFocusMode() {
+            document.body.classList.toggle("focus-mode");
+            alert("מצב ריכוז מופעל!");
+        }
+
+        // Toggle Larger Text Mode
+        function toggleLargerText() {
+            document.body.style.fontSize = "1.5em";
         }
 
         document.addEventListener("DOMContentLoaded", function() {
