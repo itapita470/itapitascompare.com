@@ -114,6 +114,7 @@
     <script>
         let map;
         let flightMarkers = [];
+        const API_KEY = 'YOUR_API_KEY'; // הכנס את מפתח ה-API שלך כאן
 
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
@@ -121,13 +122,29 @@
                 zoom: 3
             });
 
-            // כאן תוכל להוסיף לוגיקה למעקב אחרי מיקומים בזמן אמת של טיסות
-            // הוספת טיסות לדוגמה
-            addFlightMarker(32.0853, 34.7818, "טיסה 1");
-            addFlightMarker(40.7128, -74.0060, "טיסה 2");
-            addFlightMarker(48.8566, 2.3522, "טיסה 3");
+            // טוען נתונים על טיסות בזמן אמת
+            loadRealTimeFlights();
         }
 
+        // טוען נתונים על טיסות בזמן אמת מה-API
+        function loadRealTimeFlights() {
+            fetch(`https://api.aviationstack.com/v1/flights?access_key=${API_KEY}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.data.forEach(flight => {
+                        let lat = flight.geography.latitude;
+                        let lng = flight.geography.longitude;
+                        let flightName = flight.flight.iata;
+
+                        addFlightMarker(lat, lng, flightName);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching flight data:', error);
+                });
+        }
+
+        // הוספת סימן על המפה עבור כל טיסה
         function addFlightMarker(lat, lng, flightName) {
             const marker = new google.maps.Marker({
                 position: { lat, lng },
