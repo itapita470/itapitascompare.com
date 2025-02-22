@@ -1,213 +1,229 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ממיר מטבע ומחירי טיסות</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin: auto;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #888;
-        }
-        body { margin: 0; overflow: hidden; }
-        #exchangeRates {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255,255,255,0.8);
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 100;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ממיר מטבע ומחירי טיסות</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      overflow: hidden;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      margin: 20px auto;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    #exchangeRates {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.8);
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 100;
+    }
+    #realButton {
+      position: absolute;
+      background-color: green;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>המרת מטבע</h2>
-        <input type="number" id="amount" placeholder="הזן סכום">
-        <select id="currency">
-            <option value="usd">דולר ($)</option>
-            <option value="eur">יורו (€)</option>
-        </select>
-        <button onclick="convertCurrency()">המר</button>
-        <p id="result"></p>
-    </div>
+  <!-- תצוגת שערי החליפין -->
+  <div id="exchangeRates">
+    <p>שער USD: <span id="usdRate">...</span></p>
+    <p>שער EUR: <span id="eurRate">...</span></p>
+  </div>
 
-    <div class="container">
-        <h2>חיפוש טיסות</h2>
-        <input type="text" id="destination" placeholder="בחר יעד">
-        <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
+  <!-- המרת מטבע -->
+  <div class="container">
+    <h2>המרת מטבע</h2>
+    <input type="number" id="amount" placeholder="הזן סכום">
+    <select id="currency">
+      <option value="usd">דולר ($)</option>
+      <option value="eur">יורו (€)</option>
+    </select>
+    <button onclick="convertCurrency()">המר</button>
+    <p id="result"></p>
+  </div>
 
-        <select id="airline">
-            <option value="all">בחר חברת תעופה</option>
-            <option value="אל על">אל על</option>
-            <option value="ריינאייר">ריינאייר</option>
-            <option value="אייר פראנס">אייר פראנס</option>
-            <option value="טורקיש איירליינס">טורקיש איירליינס</option>
-            <option value="לופטהנזה">לופטהנזה</option>
-            <option value="וויז אייר">וויז אייר</option>
-        </select>
+  <!-- חיפוש טיסות -->
+  <div class="container">
+    <h2>חיפוש טיסות</h2>
+    <input type="text" id="destination" placeholder="בחר יעד (לדוגמה: ישראל, בריטניה, הולנד, גרמניה, צרפת, ספרד, יפן, ארצות הברית, קנדה, אוסטרליה, סין, איטליה, שוויץ)">
+    <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
+    <select id="airline">
+      <option value="all">בחר חברת תעופה</option>
+      <option value="אל על">אל על</option>
+      <option value="ריינאייר">ריינאייר</option>
+      <option value="אייר פראנס">אייר פראנס</option>
+      <option value="טורקיש איירליינס">טורקיש איירליינס</option>
+      <option value="לופטהנזה">לופטהנזה</option>
+      <option value="וויז אייר">וויז אייר</option>
+    </select>
+    <button onclick="calculateFlights()">חשב מחירי טיסות</button>
+    <ul id="flightPrices"></ul>
+  </div>
 
-        <button onclick="calculateFlights()">חשב מחירי טיסות</button>
-        <ul id="flightPrices"></ul>
-    </div>
+  <!-- כפתור אקראי לאימות -->
+  <p>לחץ על הכפתור הירוק כדי להמשיך</p>
+  <button id="realButton">לחץ כאן</button>
 
-    <div id="exchangeRates">
-        <p>שער USD: <span id="usdRate">...</span></p>
-        <p>שער EUR: <span id="eurRate">...</span></p>
-    </div>
+  <script>
+    // עדכון שערי חליפין באמצעות API
+    async function fetchExchangeRates() {
+      try {
+        // אנו משתמשים ב-API עם בסיס ILS (שקל)
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/ILS');
+        const data = await response.json();
+        // מחשבים את ההיפוך כדי לקבל כמה יחידות מטבע חוץ שוות לשקל
+        document.getElementById('usdRate').textContent = (1 / data.rates.USD).toFixed(4);
+        document.getElementById('eurRate').textContent = (1 / data.rates.EUR).toFixed(4);
+      } catch (error) {
+        console.error('שגיאה בקבלת שערי החליפין:', error);
+      }
+    }
+    
+    // קריאה ראשונית ועדכון כל 5 שניות
+    fetchExchangeRates();
+    setInterval(fetchExchangeRates, 5000);
 
-    <script>
-        // --- חלק של עדכון שערי חליפין ---
-        async function fetchExchangeRates() {
-            try {
-                // שימוש ב-API חינמי לשערי חליפין
-                const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-                const data = await response.json();
-                document.getElementById('usdRate').textContent = data.rates.USD;
-                document.getElementById('eurRate').textContent = data.rates.EUR;
-            } catch (error) {
-                console.error('שגיאה בקבלת שערי החליפין:', error);
-            }
-        }
+    // המרת מטבע - שימוש בשערים המוצגים בדף לצורך המרה
+    function convertCurrency() {
+      let amount = document.getElementById("amount").value;
+      let currency = document.getElementById("currency").value;
+      if (!amount || isNaN(amount)) {
+        alert("נא להזין סכום תקין");
+        return;
+      }
+      let rate;
+      if(currency === "usd") {
+        rate = parseFloat(document.getElementById('usdRate').textContent);
+      } else {
+        rate = parseFloat(document.getElementById('eurRate').textContent);
+      }
+      if (!rate || isNaN(rate)) {
+        alert("השער אינו זמין כרגע, נסה מאוחר יותר");
+        return;
+      }
+      let converted = (amount * rate).toFixed(2);
+      document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
+    }
 
-        // קריאה ראשונית ועדכון כל 5 שניות
-        fetchExchangeRates();
-        setInterval(fetchExchangeRates, 5000);
+    // רשימת תוספות לפי מדינה לחישוב מחירי טיסות
+    const countrySurcharges = {
+      "ישראל": 1.0,
+      "בריטניה": 1.15,
+      "הולנד": 1.10,
+      "גרמניה": 1.08,
+      "צרפת": 1.05,
+      "ספרד": 1.20,
+      "יפן": 1.18,
+      "ארצות הברית": 1.25,
+      "קנדה": 1.22,
+      "אוסטרליה": 1.30,
+      "סין": 1.28,
+      "איטליה": 1.12,
+      "שוויץ": 1.35
+    };
 
-        // --- לוגיקה להמרת מטבע ---
-        const rates = { usd: 3.56, eur: 3.73 };
-        function convertCurrency() {
-            let amount = document.getElementById("amount").value;
-            let currency = document.getElementById("currency").value;
-            if (!amount || isNaN(amount)) {
-                alert("נא להזין סכום תקין");
-                return;
-            }
-            let converted = (amount * rates[currency]).toFixed(2);
-            document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
-        }
+    // מערך חברות התעופה
+    const airlines = [
+      { name: "אל על", basePrice: 320 },
+      { name: "ריינאייר", basePrice: 270 },
+      { name: "אייר פראנס", basePrice: 300 },
+      { name: "טורקיש איירליינס", basePrice: 350 },
+      { name: "לופטהנזה", basePrice: 380 },
+      { name: "וויז אייר", basePrice: 250 }
+    ];
 
-        // --- לוגיקה למחירי טיסות ---
-        const countrySurcharges = {
-            "ישראל": 1.0,
-            "בריטניה": 1.15,
-            "הולנד": 1.10,
-            "גרמניה": 1.08,
-            "צרפת": 1.05,
-            "ספרד": 1.20,
-            "יפן": 1.18
-        };
-        const airlines = [
-            { name: "אל על", basePrice: 320 },
-            { name: "ריינאייר", basePrice: 270 },
-            { name: "אייר פראנס", basePrice: 300 },
-            { name: "טורקיש איירליינס", basePrice: 350 },
-            { name: "לופטהנזה", basePrice: 380 },
-            { name: "וויז אייר", basePrice: 250 }
-        ];
+    // חישוב מחירי טיסות לפי יעד, מספר ימים ובחירת חברת תעופה
+    function calculateFlights() {
+      let destination = document.getElementById("destination").value;
+      let days = document.getElementById("days").value;
+      let airlineChoice = document.getElementById("airline").value;
+      let list = document.getElementById("flightPrices");
+      list.innerHTML = "";
 
-        function calculateFlights() {
-            let destination = document.getElementById("destination").value;
-            let days = document.getElementById("days").value;
-            let airlineChoice = document.getElementById("airline").value;
-            let list = document.getElementById("flightPrices");
-            list.innerHTML = "";
+      if (!destination || !countrySurcharges[destination]) {
+        alert("נא לבחור יעד תקני. וודא שהיעד מופיע ברשימת המדינות: " + Object.keys(countrySurcharges).join(", "));
+        return;
+      }
+      if (!days || isNaN(days) || days <= 0) {
+        alert("נא להזין מספר ימים תקין");
+        return;
+      }
+      let surcharge = countrySurcharges[destination];
+      airlines.filter(airline => airlineChoice === "all" || airline.name === airlineChoice)
+        .forEach(airline => {
+          let price = (airline.basePrice * surcharge * days).toFixed(2);
+          let li = document.createElement("li");
+          li.innerText = `${airline.name}: ${price} ₪`;
+          list.appendChild(li);
+      });
+    }
 
-            if (!destination || !countrySurcharges[destination]) {
-                alert("נא לבחור יעד תקני");
-                return;
-            }
-            if (!days || isNaN(days) || days <= 0) {
-                alert("נא להזין מספר ימים תקין");
-                return;
-            }
-            let surcharge = countrySurcharges[destination];
-            airlines.filter(airline => airlineChoice === "all" || airline.name === airlineChoice).forEach(airline => {
-                let price = (airline.basePrice * surcharge * days).toFixed(2);
-                let li = document.createElement("li");
-                li.innerText = `${airline.name}: ${price} ₪`;
-                list.appendChild(li);
-const safeInput = input.replace(/</g, "&lt;").replace(/>/g, "&gt;");  
-document.getElementById("playerName").innerText = safeInput;
+    // מניעת רמאות בקלט - דוגמה למניעת לחיצות מהירות מדי
+    let lastActionTime = 0;
+    const MIN_INTERVAL = 1000; // 1 שניה
 
-let lastActionTime = 0;
-const MIN_INTERVAL = 1000; // 1 שניה
+    function onCollectResource() {
+      const now = Date.now();
+      if (now - lastActionTime < MIN_INTERVAL) {
+        console.warn("יותר מידי לחיצות מהר מדי");
+        return;
+      }
+      lastActionTime = now;
+      // כאן תוכל להפעיל את פונקציית איסוף המשאב שלך
+      // collectResource();
+    }
 
-function onCollectResource() {
-  const now = Date.now();
-  if (now - lastActionTime < MIN_INTERVAL) {
-    console.warn("יותר מידי לחיצות מהר מדי");
-    return; // לא מאפשרים פעולה
-  }
-  lastActionTime = now;
-  // ביצוע איסוף המשאב
-  collectResource();
-}
-let resourcesCollected = 0;
-let startTime = Date.now();
+    // אבטחת קלט – מניעת הזרקת HTML
+    function sanitizeInput(input) {
+      return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
 
-function onCollectResource() {
-  // העדכון הקודם עם rate limiting נשמר כאן
-  resourcesCollected++;
+    // כפתור אקראי – העברת מיקום אקראי בכל טעינה
+    function randomizeButtonPosition() {
+      const btn = document.getElementById("realButton");
+      btn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+      btn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+    }
 
-  // אם תוך 10 שניות נאספו יותר מדי משאבים, אולי יש ניסיון רמאות
-  if (Date.now() - startTime < 10000 && resourcesCollected > 20) {
-    console.warn("פעילות חשודה: איסוף משאבים מוגזם");
-    // ניתן להפעיל מנגנון חבטה או לעצור את האינטרקציה
-  }
-}
-<p>לחץ על הכפתור הירוק כדי להמשיך</p>
-<button id="realButton" style="position: absolute;"></button>
+    document.getElementById("realButton").addEventListener("click", function() {
+      alert("אומתת בהצלחה!");
+    });
 
-<script>
-  function randomizeButtonPosition() {
-    const btn = document.getElementById("realButton");
-    btn.style.left = Math.random() * window.innerWidth + "px";
-    btn.style.top = Math.random() * window.innerHeight + "px";
-  }
-
-  document.getElementById("realButton").addEventListener("click", function() {
-    alert("אומתת בהצלחה!");
-  });
-
-  randomizeButtonPosition();
-</script>
-
-
-            });
-        }
-    </script>
-
-    <footer>
-        <p>By itapita's site</p>
-    </footer>
+    randomizeButtonPosition();
+  </script>
+  
+  <footer>
+    <p>By itapita's site</p>
+  </footer>
 </body>
 </html>
