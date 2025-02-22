@@ -78,7 +78,12 @@
             text-align: center;
         }
         .premium-content {
-            display: none; /* תוכן פרימיום מוסתר אם המשתמש לא שילם */
+            display: none;
+        }
+        iframe {
+            border: none;
+            width: 100%;
+            height: 200px;
         }
     </style>
 </head>
@@ -129,11 +134,16 @@
         </form>
     </div>
 
+    <!-- Map iframe (לדוגמה, Google Maps בזמן אמת לטיסות) -->
+    <div class="container premium-content">
+        <h3>מפת טיסות בזמן אמת</h3>
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=XXXXXXXXXXX"></iframe>
+    </div>
+
     <script>
         let isSignedIn = false;
-        let isPremiumUser = false; // בודק אם המשתמש פרימיום
+        let isPremiumUser = false;
 
-        // התחברות למערכת
         function signIn() {
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
@@ -145,22 +155,19 @@
             document.getElementById("loginModal").style.display = "none";
         }
 
-        // הצגת תוכן פרימיום אם המשתמש שילם
         function showPremiumContent() {
             if (isPremiumUser) {
+                document.querySelector('.premium-content').style.display = 'block';
                 alert("הגעת לתוכן פרימיום!");
-                document.querySelector('.premium-content').style.display = 'block'; // מראה תוכן פרימיום
             } else {
                 alert("עליך לשדרג לאיטהפרו כדי לגשת לתוכן זה.");
             }
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            // הצגת שערי מטבעים
             fetchExchangeRates();
             setInterval(fetchExchangeRates, 30000);
 
-            // אם המשתמש שילם על איטהפרו
             if (localStorage.getItem('isPremiumUser') === 'true') {
                 isPremiumUser = true;
                 alert("ברוך הבא למנוי פרימיום");
