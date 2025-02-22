@@ -84,6 +84,22 @@
             border-radius: 10px;
             text-align: center;
         }
+
+        /* מצב ריכוז */
+        .focus-mode body {
+            background-color: #ffffff;
+            color: black;
+        }
+        .focus-mode .container, .focus-mode #exchangeRates {
+            box-shadow: none;
+            border-radius: 0;
+            max-width: 100%;
+            width: 100%;
+            padding: 40px;
+        }
+        .focus-mode .sideButton, .focus-mode .focusButton {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -231,24 +247,20 @@
                 <p>טיסות מ-${departureCity} ל-${destinationCity}</p>
                 <p>משך הנסיעה: ${days} ימים</p>
                 <p>יעד: ${country}</p>
-                <ul>
-                    <li>טיסה 1: שעה 08:00, מחיר: 500 ש"ח</li>
-                    <li>טיסה 2: שעה 12:00, מחיר: 700 ש"ח</li>
-                </ul>
             `;
         }
 
-        // Toggle Focus Mode (simplified)
+        // Toggle Focus Mode
         function toggleFocusMode() {
-            document.body.classList.toggle("focus-mode");
-            alert("מצב ריכוז מופעל!");
+            document.body.classList.toggle('focus-mode');
         }
 
-        // Toggle Larger Text Mode
+        // Toggle Larger Text
         function toggleLargerText() {
-            document.body.style.fontSize = "1.5em";
+            document.body.classList.toggle('larger-text');
         }
 
+        // Initialize
         document.addEventListener("DOMContentLoaded", function() {
             fetchExchangeRates();
             setInterval(fetchExchangeRates, 30000);
