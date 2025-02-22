@@ -128,16 +128,21 @@
 
         // טוען נתונים על טיסות בזמן אמת מה-API
         function loadRealTimeFlights() {
-            fetch(`https://api.aviationstack.com/v1/flights?access_key=${API_KEY}`)
+            // שלח בקשה ל-API של AviationStack
+            fetch(`https://api.aviationstack.com/v1/flights?access_key=${API_KEY}&limit=5`)  // הגבל את התוצאה ל-5 טיסות
                 .then(response => response.json())
                 .then(data => {
-                    data.data.forEach(flight => {
-                        let lat = flight.geography.latitude;
-                        let lng = flight.geography.longitude;
-                        let flightName = flight.flight.iata;
+                    if (data.data) {
+                        data.data.forEach(flight => {
+                            if (flight.geography) {
+                                let lat = flight.geography.latitude;
+                                let lng = flight.geography.longitude;
+                                let flightName = flight.flight.iata || "לא זמין";
 
-                        addFlightMarker(lat, lng, flightName);
-                    });
+                                addFlightMarker(lat, lng, flightName);
+                            }
+                        });
+                    }
                 })
                 .catch(error => {
                     console.error('Error fetching flight data:', error);
