@@ -75,7 +75,7 @@
   <!-- חיפוש טיסות -->
   <div class="container">
     <h2>חיפוש טיסות</h2>
-    <input type="text" id="destination" placeholder="בחר יעד (לדוגמה: ישראל, בריטניה, הולנד, גרמניה, צרפת, ספרד, יפן, ארצות הברית, קנדה, אוסטרליה, סין, איטליה, שוויץ)">
+    <input type="text" id="destination" placeholder="בחר יעד (למשל: ישראל, בריטניה, הולנד, גרמניה, צרפת, ספרד, יפן, ארצות הברית, קנדה, אוסטרליה, סין, איטליה, שוויץ)">
     <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
     <select id="airline">
       <option value="all">בחר חברת תעופה</option>
@@ -95,13 +95,13 @@
   <button id="realButton">לחץ כאן</button>
 
   <script>
-    // עדכון שערי חליפין באמצעות API
+    // עדכון שערי חליפין באמצעות API (בסיס ILS)
     async function fetchExchangeRates() {
       try {
-        // אנו משתמשים ב-API עם בסיס ILS (שקל)
         const response = await fetch('https://api.exchangerate-api.com/v4/latest/ILS');
         const data = await response.json();
-        // מחשבים את ההיפוך כדי לקבל כמה יחידות מטבע חוץ שוות לשקל
+        // data.rates מכיל את שערי החליפין, כאשר לדוגמה data.rates.USD הוא כמה יחידות דולר שווים ל-1 ILS
+        // לכן, כדי לדעת כמה ILS שווה 1 דולר, מחשבים את ההיפוך
         document.getElementById('usdRate').textContent = (1 / data.rates.USD).toFixed(4);
         document.getElementById('eurRate').textContent = (1 / data.rates.EUR).toFixed(4);
       } catch (error) {
@@ -113,7 +113,7 @@
     fetchExchangeRates();
     setInterval(fetchExchangeRates, 5000);
 
-    // המרת מטבע - שימוש בשערים המוצגים בדף לצורך המרה
+    // המרת מטבע - שימוש בשערים המוצגים בעמוד
     function convertCurrency() {
       let amount = document.getElementById("amount").value;
       let currency = document.getElementById("currency").value;
@@ -122,7 +122,7 @@
         return;
       }
       let rate;
-      if(currency === "usd") {
+      if (currency === "usd") {
         rate = parseFloat(document.getElementById('usdRate').textContent);
       } else {
         rate = parseFloat(document.getElementById('eurRate').textContent);
@@ -188,7 +188,7 @@
       });
     }
 
-    // מניעת רמאות בקלט - דוגמה למניעת לחיצות מהירות מדי
+    // מניעת לחיצות מהירות מדי – דוגמה למניעת רמאות בקלט
     let lastActionTime = 0;
     const MIN_INTERVAL = 1000; // 1 שניה
 
