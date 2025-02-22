@@ -155,6 +155,53 @@
                 let li = document.createElement("li");
                 li.innerText = `${airline.name}: ${price} ₪`;
                 list.appendChild(li);
+const safeInput = input.replace(/</g, "&lt;").replace(/>/g, "&gt;");  
+document.getElementById("playerName").innerText = safeInput;
+
+let lastActionTime = 0;
+const MIN_INTERVAL = 1000; // 1 שניה
+
+function onCollectResource() {
+  const now = Date.now();
+  if (now - lastActionTime < MIN_INTERVAL) {
+    console.warn("יותר מידי לחיצות מהר מדי");
+    return; // לא מאפשרים פעולה
+  }
+  lastActionTime = now;
+  // ביצוע איסוף המשאב
+  collectResource();
+}
+let resourcesCollected = 0;
+let startTime = Date.now();
+
+function onCollectResource() {
+  // העדכון הקודם עם rate limiting נשמר כאן
+  resourcesCollected++;
+
+  // אם תוך 10 שניות נאספו יותר מדי משאבים, אולי יש ניסיון רמאות
+  if (Date.now() - startTime < 10000 && resourcesCollected > 20) {
+    console.warn("פעילות חשודה: איסוף משאבים מוגזם");
+    // ניתן להפעיל מנגנון חבטה או לעצור את האינטרקציה
+  }
+}
+<p>לחץ על הכפתור הירוק כדי להמשיך</p>
+<button id="realButton" style="position: absolute;"></button>
+
+<script>
+  function randomizeButtonPosition() {
+    const btn = document.getElementById("realButton");
+    btn.style.left = Math.random() * window.innerWidth + "px";
+    btn.style.top = Math.random() * window.innerHeight + "px";
+  }
+
+  document.getElementById("realButton").addEventListener("click", function() {
+    alert("אומתת בהצלחה!");
+  });
+
+  randomizeButtonPosition();
+</script>
+
+
             });
         }
     </script>
