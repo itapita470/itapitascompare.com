@@ -8,17 +8,18 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
             margin: 0;
-            padding: 0;
         }
         .container {
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            max-width: 600px;
-            text-align: center;
+            max-width: 400px;
+            margin: auto;
+            margin-top: 20px;
         }
         input, select, button {
             width: 100%;
@@ -37,7 +38,7 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255,255,255,0.9);
             padding: 10px;
             border-radius: 5px;
             z-index: 100;
@@ -76,23 +77,13 @@
             border-radius: 10px;
             text-align: center;
         }
-        #map {
-            height: 400px;
-            width: 100%;
-            margin-top: 20px;
-        }
-        #premiumFeature {
-            display: none;
-            margin-top: 20px;
-            font-size: 18px;
-            color: gold;
+        .premium-content {
+            display: none; /* תוכן פרימיום מוסתר אם המשתמש לא שילם */
         }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 </head>
 <body>
 
-    <!-- Modal Login -->
     <div id="loginModal">
         <div class="login-box">
             <h2>כניסה</h2>
@@ -102,7 +93,6 @@
         </div>
     </div>
 
-    <!-- Exchange Rates Display -->
     <div id="exchangeRates">
         <p>שער USD: <span id="usdRate">...</span></p>
         <p>שער EUR: <span id="eurRate">...</span></p>
@@ -110,8 +100,7 @@
         <p>שער JPY: <span id="jpyRate">...</span></p>
     </div>
 
-    <!-- Currency Converter Section -->
-    <div class="container" id="currencyContainer">
+    <div class="container">
         <h2>המרת מטבע</h2>
         <input type="number" id="amount" placeholder="הזן סכום">
         <select id="currency">
@@ -124,30 +113,27 @@
         <p id="result"></p>
     </div>
 
-    <!-- Sidebar with Buttons -->
     <div id="buttonsSidebar">
-        <button class="sideButton" onclick="showCurrencyConverter()">💰 המרת מטבע</button>
-        <button class="sideButton" onclick="showFlights()">✈️ חיפוש טיסות</button>
-        <button class="sideButton" onclick="toggleLoginModal()">🔑 התחבר</button>
+        <button class="sideButton" onclick="showPremiumContent()">💰 המרת מטבע (פרימיום)</button>
+        <button class="sideButton">✈️ חיפוש טיסות</button>
+        <button class="sideButton">🔑 התחבר</button>
     </div>
 
-    <!-- Flights Section -->
-    <div class="container" id="flightsContainer" style="display: none;">
-        <h2>מפת טיסות בזמן אמת</h2>
-        <div id="map"></div>
-        <div id="flightDetails">
-            <h3>פרטי טיסה</h3>
-            <p id="flightInfo">הטיסה לא נמצאה.</p>
-        </div>
-        <div id="premiumFeature">
-            <h3>ברוך הבא לאיטהפרו! אתה עכשיו בכסף פרימיום</h3>
-        </div>
+    <!-- PayPal Payment Button -->
+    <div class="container">
+        <h3>שדרג לאיטהפרו</h3>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_s-xclick">
+            <input type="hidden" name="hosted_button_id" value="XXXXXXX"> <!-- ה-ID שלך ב-PayPal -->
+            <input type="submit" value="שדרג לאיטהפרו" name="submit" class="sideButton">
+        </form>
     </div>
 
     <script>
         let isSignedIn = false;
+        let isPremiumUser = false; // בודק אם המשתמש פרימיום
 
-        // Handle sign-in
+        // התחברות למערכת
         function signIn() {
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
@@ -157,17 +143,30 @@
             }
             isSignedIn = true;
             document.getElementById("loginModal").style.display = "none";
-            document.getElementById("premiumFeature").style.display = "block";  // Show premium feature
         }
 
-        // Toggle login modal
-        function toggleLoginModal() {
-            if (!isSignedIn) {
-                document.getElementById("loginModal").style.display = "flex";
+        // הצגת תוכן פרימיום אם המשתמש שילם
+        function showPremiumContent() {
+            if (isPremiumUser) {
+                alert("הגעת לתוכן פרימיום!");
+                document.querySelector('.premium-content').style.display = 'block'; // מראה תוכן פרימיום
+            } else {
+                alert("עליך לשדרג לאיטהפרו כדי לגשת לתוכן זה.");
             }
         }
 
-        // Fetch exchange rates from API
+        document.addEventListener("DOMContentLoaded", function() {
+            // הצגת שערי מטבעים
+            fetchExchangeRates();
+            setInterval(fetchExchangeRates, 30000);
+
+            // אם המשתמש שילם על איטהפרו
+            if (localStorage.getItem('isPremiumUser') === 'true') {
+                isPremiumUser = true;
+                alert("ברוך הבא למנוי פרימיום");
+            }
+        });
+
         async function fetchExchangeRates() {
             try {
                 const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
@@ -181,7 +180,6 @@
             }
         }
 
-        // Currency conversion
         function convertCurrency() {
             if (!isSignedIn) {
                 document.getElementById("loginModal").style.display = "flex";
@@ -216,77 +214,6 @@
             let converted = (amount * rate).toFixed(2);
             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
         }
-
-        // Show currency converter
-        function showCurrencyConverter() {
-            document.getElementById("flightsContainer").style.display = "none";
-            document.getElementById("currencyContainer").style.display = "block";
-        }
-
-        // Show flights section
-        function showFlights() {
-            document.getElementById("currencyContainer").style.display = "none";
-            document.getElementById("flightsContainer").style.display = "block";
-            initMap();
-        }
-
-        // Google Maps initialization for live flights
-        let map;
-        let flightMarkers = [];
-
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 31.7683, lng: 35.2137 },
-                zoom: 4
-            });
-
-            const flights = [
-                { flightId: "TLV-JFK", lat: 32.0853, lng: 34.7818, altitude: 35000, speed: 550, estimatedArrival: "2025-02-22T18:00:00" },
-                { flightId: "LHR-JFK", lat: 51.5074, lng: -0.1278, altitude: 30000, speed: 600, estimatedArrival: "2025-02-22T20:00:00" }
-            ];
-
-            flights.forEach(flight => {
-                const marker = new google.maps.Marker({
-                    position: { lat: flight.lat, lng: flight.lng },
-                    map: map,
-                    title: flight.flightId
-                });
-
-                marker.addListener('click', function() {
-                    updateFlightDetails(flight);
-                });
-
-                flightMarkers.push(marker);
-            });
-
-            // Simulate live updates for flights
-            setInterval(() => {
-                flights.forEach(flight => {
-                    flight.lat += Math.random() * 0.01;
-                    flight.lng += Math.random() * 0.01;
-                    flight.altitude += Math.random() * 100;
-                    flight.speed += Math.random() * 5;
-                });
-
-                flightMarkers.forEach((marker, index) => {
-                    marker.setPosition({ lat: flights[index].lat, lng: flights[index].lng });
-                });
-            }, 5000);
-        }
-
-        // Update flight details
-        function updateFlightDetails(flight) {
-            document.getElementById('flightInfo').innerHTML = `
-                מספר טיסה: ${flight.flightId}<br>
-                גובה: ${flight.altitude} רגל<br>
-                מהירות: ${flight.speed} קמ"ש<br>
-                זמן הגעה משוער: ${flight.estimatedArrival}`;
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            fetchExchangeRates();
-            setInterval(fetchExchangeRates, 30000);
-        });
     </script>
 
 </body>
