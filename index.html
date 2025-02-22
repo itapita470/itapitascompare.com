@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ממיר מטבע, חיפוש טיסות ושירותים נוספים. גישה נוחה ומנגישות שיפור לכלל המשתמשים.">
-    <title>ממיר מטבע, חיפוש טיסות ושירותים נוספים</title>
+    <title>ממיר מטבע ומחירי טיסות</title>
     <style>
-        /* עיצוב כללי */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             text-align: center;
             padding: 20px;
             margin: 0;
-            font-size: 16px;
         }
         .container {
             background: white;
@@ -30,7 +27,6 @@
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 16px;
         }
         button {
             background-color: red;
@@ -38,23 +34,15 @@
             cursor: pointer;
             font-size: 18px;
         }
-        /* כפתור משחק הזעם */
-        .rageButton {
-            background-color: #ff9900;
-            color: white;
+        #exchangeRates {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255,255,255,0.9);
             padding: 10px;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 5px;
+            z-index: 100;
         }
-        /* פופ-אפ של משחק הזעם */
-        #rageGame {
-            display: none;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        /* סרגל צד כפתורים */
         #buttonsSidebar {
             position: fixed;
             right: 10px;
@@ -72,15 +60,6 @@
             cursor: pointer;
             font-size: 16px;
         }
-        /* כפתור ריכוז */
-        .focusButton {
-            background-color: #ff9900;
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 16px;
-        }
-        /* מודל התחברות */
         #loginModal {
             display: none;
             position: fixed;
@@ -98,11 +77,16 @@
             border-radius: 10px;
             text-align: center;
         }
+        .settings-button {
+            background-color: green;
+        }
+        .game-button {
+            background-color: orange;
+        }
     </style>
 </head>
 <body>
 
-    <!-- מודל התחברות -->
     <div id="loginModal">
         <div class="login-box">
             <h2>כניסה</h2>
@@ -112,15 +96,13 @@
         </div>
     </div>
 
-    <!-- חלק של שערי החליפין -->
-    <div id="exchangeRates" style="position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.9); padding: 10px; border-radius: 5px; z-index: 100;">
+    <div id="exchangeRates">
         <p>שער USD: <span id="usdRate">...</span></p>
         <p>שער EUR: <span id="eurRate">...</span></p>
         <p>שער GBP: <span id="gbpRate">...</span></p>
         <p>שער JPY: <span id="jpyRate">...</span></p>
     </div>
 
-    <!-- הממיר מטבע -->
     <div class="container">
         <h2>המרת מטבע</h2>
         <input type="number" id="amount" placeholder="הזן סכום">
@@ -134,35 +116,15 @@
         <p id="result"></p>
     </div>
 
-    <!-- כפתור להחזר הפסקה -->
-    <button id="rageGameButton" class="rageButton" onclick="startRageGame()">⚡ קח הפסקה רגע ושחק במשחק 'הזעם' ⚡</button>
-
-    <!-- פופ-אפ למשחק הזעם -->
-    <div id="rageGame">
-        <h2>משחק הזעם!</h2>
-        <p>לחץ על הכפתור למטה כמה שיותר פעמים בתוך 10 שניות!</p>
-        <button id="clickButton" onclick="clickMe()">לחץ כאן</button>
-        <p>ניקוד: <span id="score">0</span></p>
-        <p>זמן: <span id="timeLeft">10</span> שניות</p>
-    </div>
-
-    <!-- כפתורי סרגל צד -->
     <div id="buttonsSidebar">
-        <button class="sideButton">💰 המרת מטבע</button>
-        <button class="sideButton">✈️ חיפוש טיסות</button>
-        <button class="sideButton">🔑 התחבר</button>
-        <button class="focusButton" onclick="toggleFocusMode()">🔒 מצב ריכוז</button>
+        <button class="sideButton" onclick="startFlightSearch()">✈️ חיפוש טיסות</button>
+        <button class="sideButton" onclick="toggleGame()">🎮 הזעם!</button>
+        <button class="sideButton" onclick="openSettings()">⚙️ הגדרות נגישות</button>
     </div>
 
     <script>
         let isSignedIn = false;
-        let score = 0;
-        let timeLeft = 10;
-        let gameInterval;
-        let countdownInterval;
-        let focusMode = false;
 
-        // התחברות למערכת
         function signIn() {
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
@@ -174,40 +136,30 @@
             document.getElementById("loginModal").style.display = "none";
         }
 
-        // אתחול המשחק "הזעם"
-        function startRageGame() {
-            document.getElementById('rageGameButton').style.display = 'none';
-            document.getElementById('rageGame').style.display = 'block';
-            score = 0;
-            timeLeft = 10;
-            document.getElementById('score').textContent = score;
-            document.getElementById('timeLeft').textContent = timeLeft;
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchExchangeRates();
+            setInterval(fetchExchangeRates, 30000);
+        });
 
-            countdownInterval = setInterval(function() {
-                timeLeft--;
-                document.getElementById('timeLeft').textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(countdownInterval);
-                    endRageGame();
-                }
-            }, 1000);
+        async function fetchExchangeRates() {
+            try {
+                const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+                const data = await response.json();
+                document.getElementById('usdRate').textContent = data.rates.ILS.toFixed(2);
+                document.getElementById('eurRate').textContent = (data.rates.ILS / data.rates.EUR).toFixed(2);
+                document.getElementById('gbpRate').textContent = (data.rates.ILS / data.rates.GBP).toFixed(2);
+                document.getElementById('jpyRate').textContent = (data.rates.ILS / data.rates.JPY).toFixed(2);
+            } catch (error) {
+                console.error('שגיאה בקבלת שערי חליפין:', error);
+            }
         }
 
-        // פעולה כאשר לוחצים על הכפתור במשחק
-        function clickMe() {
-            score++;
-            document.getElementById('score').textContent = score;
-        }
+        function convertCurrency() {
+            if (!isSignedIn) {
+                document.getElementById("loginModal").style.display = "flex";
+                return;
+            }
 
-        // סיום המשחק
-        function endRageGame() {
-            alert('המשחק נגמר! הניקוד שלך הוא: ' + score);
-            document.getElementById('rageGame').style.display = 'none';
-            document.getElementById('rageGameButton').style.display = 'block';
-        }
-
-        // המרת מטבע
-        async function convertCurrency() {
             let amount = document.getElementById("amount").value;
             let currency = document.getElementById("currency").value;
             if (!amount || isNaN(amount)) {
@@ -237,34 +189,29 @@
             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
         }
 
-        // מצב ריכוז
-        function toggleFocusMode() {
-            focusMode = !focusMode;
-            if (focusMode) {
-                document.body.style.backgroundColor = "#e0e0e0";
-            } else {
-                document.body.style.backgroundColor = "#f4f4f4";
-            }
+        function startFlightSearch() {
+            alert("חיפוש טיסות יתחיל עכשיו!");
         }
 
-        // טעינת שערי חליפין
-        async function fetchExchangeRates() {
-            try {
-                const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-                const data = await response.json();
-                document.getElementById('usdRate').textContent = data.rates.ILS.toFixed(2);
-                document.getElementById('eurRate').textContent = (data.rates.ILS / data.rates.EUR).toFixed(2);
-                document.getElementById('gbpRate').textContent = (data.rates.ILS / data.rates.GBP).toFixed(2);
-                document.getElementById('jpyRate').textContent = (data.rates.ILS / data.rates.JPY).toFixed(2);
-            } catch (error) {
-                console.error('שגיאה בקבלת שערי חליפין:', error);
-            }
+        function toggleGame() {
+            let gameArea = document.createElement('div');
+            gameArea.innerHTML = `<h3>המשחק הזעם! לחוץ את העכבר כמה שיותר מהר!</h3>`;
+            gameArea.style.width = "200px";
+            gameArea.style.height = "200px";
+            gameArea.style.border = "2px solid red";
+            gameArea.style.textAlign = "center";
+            document.body.appendChild(gameArea);
+
+            let clickCount = 0;
+            gameArea.addEventListener("click", function() {
+                clickCount++;
+                gameArea.innerHTML = `<h3>לחצת ${clickCount} פעמים!</h3>`;
+            });
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            fetchExchangeRates();
-            setInterval(fetchExchangeRates, 30000); // עדכון כל 30 שניות
-        });
+        function openSettings() {
+            alert("הגדרות נגישות פותחו!");
+        }
     </script>
 
 </body>
