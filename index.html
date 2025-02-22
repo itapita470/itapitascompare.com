@@ -64,7 +64,7 @@
         <h2>חיפוש טיסות</h2>
         <input type="text" id="destination" placeholder="בחר יעד">
         <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
-        
+
         <select id="airline">
             <option value="all">בחר חברת תעופה</option>
             <option value="אל על">אל על</option>
@@ -74,7 +74,7 @@
             <option value="לופטהנזה">לופטהנזה</option>
             <option value="וויז אייר">וויז אייר</option>
         </select>
-        
+
         <button onclick="calculateFlights()">חשב מחירי טיסות</button>
         <ul id="flightPrices"></ul>
     </div>
@@ -83,35 +83,8 @@
         <p>שער USD: <span id="usdRate">...</span></p>
         <p>שער EUR: <span id="eurRate">...</span></p>
     </div>
-  
-    <canvas id="gameCanvas"></canvas>
-  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  
+
     <script>
-        // --- חלק של המשחק (שלד בסיסי עם Three.js) ---
-        const canvas = document.getElementById('gameCanvas');
-        const renderer = new THREE.WebGLRenderer({ canvas });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
-        
-        // יצירת הדמות הראשית של המשחק (לדוגמה קוביה)
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-            renderer.render(scene, camera);
-        }
-        animate();
-        
         // --- חלק של עדכון שערי חליפין ---
         async function fetchExchangeRates() {
             try {
@@ -141,7 +114,7 @@
             let converted = (amount * rates[currency]).toFixed(2);
             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
         }
-        
+
         // --- לוגיקה למחירי טיסות ---
         const countrySurcharges = {
             "ישראל": 1.0,
