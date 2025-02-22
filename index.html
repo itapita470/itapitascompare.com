@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ממיר מטבע ומחירי טיסות</title>
+    <title>ממיר מטבע, חיפוש טיסות ומפת טיסות</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -77,11 +77,10 @@
             border-radius: 10px;
             text-align: center;
         }
-        .settings-button {
-            background-color: green;
-        }
-        .game-button {
-            background-color: orange;
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -114,13 +113,19 @@
         </select>
         <button onclick="convertCurrency()">המר</button>
         <p id="result"></p>
+
+        <h2>חיפוש טיסות</h2>
+        <button onclick="startFlightSearch()">התחל חיפוש טיסות</button>
     </div>
 
+    <div id="map"></div>
+
     <div id="buttonsSidebar">
-        <button class="sideButton" onclick="startFlightSearch()">✈️ חיפוש טיסות</button>
         <button class="sideButton" onclick="toggleGame()">🎮 הזעם!</button>
         <button class="sideButton" onclick="openSettings()">⚙️ הגדרות נגישות</button>
     </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap&v=weekly" defer></script>
 
     <script>
         let isSignedIn = false;
@@ -211,6 +216,18 @@
 
         function openSettings() {
             alert("הגדרות נגישות פותחו!");
+        }
+
+        let map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: {lat: 32.0853, lng: 34.7818}, // תל אביב לדוגמה
+                zoom: 8
+            });
+
+            // כאן תוכל להוסיף לוגיקה למעקב אחרי מיקומים בזמן אמת של טיסות
+            // לדוגמה: הוספת נקודות למפה על בסיס נתוני API של טיסות
         }
     </script>
 
