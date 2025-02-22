@@ -121,6 +121,14 @@
         <h2>חיפוש טיסות</h2>
         <input type="text" id="departureCity" placeholder="עיר יציאה">
         <input type="text" id="destinationCity" placeholder="עיר הגעה">
+        <input type="number" id="days" placeholder="כמה ימים?">
+        <select id="country">
+            <option value="USA">ארה"ב</option>
+            <option value="UK">בריטניה</option>
+            <option value="Germany">גרמניה</option>
+            <option value="Japan">יפן</option>
+            <!-- הוסף מדינות נוספות לפי הצורך -->
+        </select>
         <button onclick="searchFlights()">חפש טיסות</button>
         <div id="flightResults"></div>
     </div>
@@ -141,7 +149,6 @@
         // SignIn with Google
         function signInGoogle() {
             // Add your Google API authentication code here.
-            // For example, using Firebase or Google's OAuth2 API.
             alert("כניסה עם גוגל");
             isSignedIn = true;
             document.getElementById("loginModal").style.display = "none";
@@ -206,8 +213,10 @@
 
             const departureCity = document.getElementById("departureCity").value;
             const destinationCity = document.getElementById("destinationCity").value;
+            const days = document.getElementById("days").value;
+            const country = document.getElementById("country").value;
 
-            if (!departureCity || !destinationCity) {
+            if (!departureCity || !destinationCity || !days || !country) {
                 alert("נא למלא את כל השדות");
                 return;
             }
@@ -216,6 +225,8 @@
             flightResults.innerHTML = `
                 <h3>תוצאות חיפוש:</h3>
                 <p>טיסות מ-${departureCity} ל-${destinationCity}</p>
+                <p>משך הנסיעה: ${days} ימים</p>
+                <p>יעד: ${country}</p>
                 <ul>
                     <li>טיסה 1: שעה 08:00, מחיר: 500 ש"ח</li>
                     <li>טיסה 2: שעה 12:00, מחיר: 700 ש"ח</li>
