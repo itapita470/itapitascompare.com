@@ -8,18 +8,17 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
             margin: 0;
+            padding: 0;
         }
         .container {
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin: auto;
-            margin-top: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            text-align: center;
         }
         input, select, button {
             width: 100%;
@@ -38,7 +37,7 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.8);
             padding: 10px;
             border-radius: 5px;
             z-index: 100;
@@ -260,21 +259,34 @@
                 flightMarkers.push(marker);
             });
 
-            // Simulate live flight movement
+            // Simulate live updates for flights
             setInterval(() => {
-                flightMarkers.forEach(marker => {
-                    let newLat = marker.getPosition().lat() + (Math.random() * 0.1 - 0.05);
-                    let newLng = marker.getPosition().lng() + (Math.random() * 0.1 - 0.05);
-                    marker.setPosition(new google.maps.LatLng(newLat, newLng));
+                flights.forEach(flight => {
+                    flight.lat += Math.random() * 0.01;
+                    flight.lng += Math.random() * 0.01;
+                    flight.altitude += Math.random() * 100;
+                    flight.speed += Math.random() * 5;
+                });
+
+                flightMarkers.forEach((marker, index) => {
+                    marker.setPosition({ lat: flights[index].lat, lng: flights[index].lng });
                 });
             }, 5000);
         }
 
         // Update flight details
         function updateFlightDetails(flight) {
-            const info = `Flight ID: ${flight.flightId}<br>Altitude: ${flight.altitude} feet<br>Speed: ${flight.speed} km/h<br>Estimated Arrival: ${flight.estimatedArrival}`;
-            document.getElementById("flightInfo").innerHTML = info;
+            document.getElementById('flightInfo').innerHTML = `
+                מספר טיסה: ${flight.flightId}<br>
+                גובה: ${flight.altitude} רגל<br>
+                מהירות: ${flight.speed} קמ"ש<br>
+                זמן הגעה משוער: ${flight.estimatedArrival}`;
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchExchangeRates();
+            setInterval(fetchExchangeRates, 30000);
+        });
     </script>
 
 </body>
