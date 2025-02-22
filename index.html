@@ -82,6 +82,12 @@
             width: 100%;
             margin-top: 20px;
         }
+        #premiumFeature {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            color: gold;
+        }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 </head>
@@ -117,17 +123,20 @@
     </div>
 
     <div id="buttonsSidebar">
-        <button class="sideButton">💰 המרת מטבע</button>
-        <button class="sideButton">✈️ חיפוש טיסות</button>
+        <button class="sideButton" onclick="showCurrencyConverter()">💰 המרת מטבע</button>
+        <button class="sideButton" onclick="showFlights()">✈️ חיפוש טיסות</button>
         <button class="sideButton" onclick="toggleLoginModal()">🔑 התחבר</button>
     </div>
 
-    <div class="container">
+    <div class="container" id="flightsContainer" style="display: none;">
         <h2>מפת טיסות בזמן אמת</h2>
         <div id="map"></div>
         <div id="flightDetails">
             <h3>פרטי טיסה</h3>
             <p id="flightInfo">הטיסה לא נמצאה.</p>
+        </div>
+        <div id="premiumFeature">
+            <h3>ברוך הבא לאיטהפרו! אתה עכשיו בכסף פרימיום</h3>
         </div>
     </div>
 
@@ -144,6 +153,7 @@
             }
             isSignedIn = true;
             document.getElementById("loginModal").style.display = "none";
+            document.getElementById("premiumFeature").style.display = "block";  // הופעת אפשרות פרימיום
         }
 
         // הצגת מודל התחברות
@@ -203,6 +213,19 @@
             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
         }
 
+        // הצגת המרת מטבע
+        function showCurrencyConverter() {
+            document.getElementById("flightsContainer").style.display = "none";
+            document.querySelector(".container").style.display = "block";
+        }
+
+        // הצגת טיסות בזמן אמת
+        function showFlights() {
+            document.querySelector(".container").style.display = "none";
+            document.getElementById("flightsContainer").style.display = "block";
+            initMap();
+        }
+
         // יצירת מפת טיסות
         let map;
         let flightMarkers = [];
@@ -236,8 +259,7 @@
             // עדכון מיקומים של טיסות בזמן אמת
             setInterval(() => {
                 flightMarkers.forEach(marker => {
-                    // כאן יש לעדכן את המיקום של כל טיסה בזמן אמת
-                    let newLat = marker.getPosition().lat() + (Math.random() * 0.1 - 0.05); // דוגמה לשינוי מיקום אקראי
+                    let newLat = marker.getPosition().lat() + (Math.random() * 0.1 - 0.05);
                     let newLng = marker.getPosition().lng() + (Math.random() * 0.1 - 0.05);
                     marker.setPosition(new google.maps.LatLng(newLat, newLng));
                 });
@@ -246,21 +268,4 @@
 
         // עדכון פרטי טיסה
         function updateFlightDetails(flight) {
-            const estimatedArrival = new Date(flight.estimatedArrival);
-            document.getElementById("flightInfo").innerHTML = `
-                טיסה: ${flight.flightId} <br>
-                גובה: ${flight.altitude} רגל <br>
-                מהירות: ${flight.speed} קמ"ש <br>
-                זמן הגעה משוער: ${estimatedArrival.toLocaleString()} <br>
-            `;
-        }
-
-        // טעינת שערי חליפין ברגע שהדף נטען
-        document.addEventListener("DOMContentLoaded", function() {
-            fetchExchangeRates();
-            setInterval(fetchExchangeRates, 30000);
-        });
-    </script>
-
-</body>
-</html>
+           
