@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>המרת מטבע, חיפוש טיסות ומפת טיסות</title>
+    <title>ממיר מטבע ומחירי טיסות</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             text-align: center;
             padding: 20px;
-            margin: 0;
         }
         .container {
             background: white;
@@ -19,7 +18,6 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             margin: auto;
-            margin-top: 20px;
         }
         input, select, button {
             width: 100%;
@@ -29,137 +27,83 @@
             border-radius: 5px;
         }
         button {
-            background-color: red;
+            background-color: #007bff;
             color: white;
             cursor: pointer;
-            font-size: 18px;
         }
-        #map {
-            width: 100%;
-            height: 400px;
+        footer {
             margin-top: 20px;
+            font-size: 14px;
+            color: #888;
         }
-        #buttonsSidebar {
-            position: fixed;
+        body { margin: 0; overflow: hidden; }
+        #exchangeRates {
+            position: absolute;
+            top: 10px;
             right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .sideButton {
-            background-color: blue;
-            color: white;
+            background: rgba(255,255,255,0.8);
             padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
+            border-radius: 5px;
+            z-index: 100;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
         <h2>המרת מטבע</h2>
         <input type="number" id="amount" placeholder="הזן סכום">
         <select id="currency">
             <option value="usd">דולר ($)</option>
             <option value="eur">יורו (€)</option>
-            <option value="gbp">פאונד (£)</option>
-            <option value="jpy">ין יפני (¥)</option>
         </select>
         <button onclick="convertCurrency()">המר</button>
         <p id="result"></p>
+    </div>
 
+    <div class="container">
         <h2>חיפוש טיסות</h2>
-        <label for="departureCountry">בחר מדינה לעזיבה:</label>
-        <select id="departureCountry">
-            <option value="ישראל">ישראל</option>
-            <option value="ארה"ב">ארה"ב</option>
-            <option value="צרפת">צרפת</option>
-            <option value="גרמניה">גרמניה</option>
-        </select>
-        <label for="destinationCountry">בחר מדינה יעד:</label>
-        <select id="destinationCountry">
-            <option value="ארה"ב">ארה"ב</option>
-            <option value="ישראל">ישראל</option>
-            <option value="צרפת">צרפת</option>
-            <option value="גרמניה">גרמניה</option>
+        <input type="text" id="destination" placeholder="בחר יעד">
+        <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
+
+        <select id="airline">
+            <option value="all">בחר חברת תעופה</option>
+            <option value="אל על">אל על</option>
+            <option value="ריינאייר">ריינאייר</option>
+            <option value="אייר פראנס">אייר פראנס</option>
+            <option value="טורקיש איירליינס">טורקיש איירליינס</option>
+            <option value="לופטהנזה">לופטהנזה</option>
+            <option value="וויז אייר">וויז אייר</option>
         </select>
 
-        <label for="departureDate">בחר תאריך יציאה:</label>
-        <input type="date" id="departureDate">
+        <button onclick="calculateFlights()">חשב מחירי טיסות</button>
+        <ul id="flightPrices"></ul>
 
-        <label for="flightDuration">בחר זמן טיסה:</label>
-        <select id="flightDuration">
-            <option value="6">6 שעות</option>
-            <option value="10">10 שעות</option>
-            <option value="14">14 שעות</option>
-        </select>
-
-        <button onclick="calculateFlight()">חשב טיסה</button>
-        <p id="flightResult"></p>
+        <p id="totalPrice"></p> <!-- הוספתי את המחיר הכולל -->
     </div>
 
-    <div id="map"></div>
-
-    <div id="buttonsSidebar">
-        <button class="sideButton" onclick="toggleGame()">🎮 הזעם!</button>
-        <button class="sideButton" onclick="openSettings()">⚙️ הגדרות נגישות</button>
+    <div id="exchangeRates">
+        <p>שער USD: <span id="usdRate">...</span></p>
+        <p>שער EUR: <span id="eurRate">...</span></p>
     </div>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap&v=weekly" defer></script>
 
     <script>
-        let map;
-        let flightMarkers = [];
-        const API_KEY = 'YOUR_API_KEY'; // הכנס את מפתח ה-API שלך כאן
-
-        function initMap() {
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: {lat: 32.0853, lng: 34.7818}, // תל אביב לדוגמה
-                zoom: 3
-            });
-
-            // טוען נתונים על טיסות בזמן אמת
-            loadRealTimeFlights();
+        // --- חלק של עדכון שערי חליפין ---
+        async function fetchExchangeRates() {
+            try {
+                const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+                const data = await response.json();
+                document.getElementById('usdRate').textContent = data.rates.USD;
+                document.getElementById('eurRate').textContent = data.rates.EUR;
+            } catch (error) {
+                console.error('שגיאה בקבלת שערי החליפין:', error);
+            }
         }
 
-        // טוען נתונים על טיסות בזמן אמת מה-API
-        function loadRealTimeFlights() {
-            // שלח בקשה ל-API של AviationStack
-            fetch(`https://api.aviationstack.com/v1/flights?access_key=${API_KEY}&limit=5`)  // הגבל את התוצאה ל-5 טיסות
-                .then(response => response.json())
-                .then(data => {
-                    if (data.data) {
-                        data.data.forEach(flight => {
-                            if (flight.geography) {
-                                let lat = flight.geography.latitude;
-                                let lng = flight.geography.longitude;
-                                let flightName = flight.flight.iata || "לא זמין";
+        fetchExchangeRates();
+        setInterval(fetchExchangeRates, 5000);
 
-                                addFlightMarker(lat, lng, flightName);
-                            }
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching flight data:', error);
-                });
-        }
-
-        // הוספת סימן על המפה עבור כל טיסה
-        function addFlightMarker(lat, lng, flightName) {
-            const marker = new google.maps.Marker({
-                position: { lat, lng },
-                map: map,
-                title: flightName
-            });
-
-            flightMarkers.push(marker);
-        }
-
+        // --- לוגיקה להמרת מטבע ---
+        const rates = { usd: 3.56, eur: 3.73 };
         function convertCurrency() {
             let amount = document.getElementById("amount").value;
             let currency = document.getElementById("currency").value;
@@ -167,63 +111,87 @@
                 alert("נא להזין סכום תקין");
                 return;
             }
-
-            let rate;
-            switch (currency) {
-                case "usd":
-                    rate = 3.5;  // שער לדוגמה
-                    break;
-                case "eur":
-                    rate = 4.0;  // שער לדוגמה
-                    break;
-                case "gbp":
-                    rate = 4.5;  // שער לדוגמה
-                    break;
-                case "jpy":
-                    rate = 0.03;  // שער לדוגמה
-                    break;
-                default:
-                    rate = 1;
-            }
-
-            let converted = (amount * rate).toFixed(2);
+            let converted = (amount * rates[currency]).toFixed(2);
             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
         }
 
-        function calculateFlight() {
-            let departureCountry = document.getElementById("departureCountry").value;
-            let destinationCountry = document.getElementById("destinationCountry").value;
-            let departureDate = document.getElementById("departureDate").value;
-            let flightDuration = document.getElementById("flightDuration").value;
+        // --- לוגיקה למחירי טיסות ---
+        const countrySurcharges = {
+            "ישראל": 1.0,
+            "בריטניה": 1.15,
+            "הולנד": 1.10,
+            "גרמניה": 1.08,
+            "צרפת": 1.05,
+            "ספרד": 1.20,
+            "יפן": 1.18,
+            "ארצות הברית": 1.12,
+            "קנדה": 1.14,
+            "איטליה": 1.09,
+            "סין": 1.22,
+            "אוסטרליה": 1.25,
+            "הודו": 1.30,
+            "ברזיל": 1.28,
+            "רוסיה": 1.35,
+            "דרום אפריקה": 1.32,
+            "מקסיקו": 1.27,
+            "קוריאה הדרומית": 1.21,
+            "טורקיה": 1.19,
+            "שוודיה": 1.11,
+            "נורווגיה": 1.13,
+            "פינלנד": 1.10,
+            "דנמרק": 1.12,
+            "שווייץ": 1.07,
+            "יוון": 1.16,
+            "פורטוגל": 1.15,
+            "פולין": 1.14,
+            "צ'כיה": 1.13,
+            "הונגריה": 1.12,
+            "אוסטריה": 1.10,
+            "בלגיה": 1.09,
+            "ניו זילנד": 1.26
+        };
 
-            if (!departureDate) {
-                alert("נא לבחור תאריך יציאה");
+        const airlines = [
+            { name: "אל על", basePrice: 320 },
+            { name: "ריינאייר", basePrice: 270 },
+            { name: "אייר פראנס", basePrice: 300 },
+            { name: "טורקיש איירליינס", basePrice: 350 },
+            { name: "לופטהנזה", basePrice: 380 },
+            { name: "וויז אייר", basePrice: 250 }
+        ];
+
+        function calculateFlights() {
+            let destination = document.getElementById("destination").value;
+            let days = document.getElementById("days").value;
+            let airlineChoice = document.getElementById("airline").value;
+            let list = document.getElementById("flightPrices");
+            list.innerHTML = "";
+            let totalPrice = 0; // משתנה למחיר הכולל
+
+            if (!destination || !countrySurcharges[destination]) {
+                alert("נא לבחור יעד תקני");
                 return;
             }
-
-            let resultText = `הטיסה מ${departureCountry} ל${destinationCountry} יוצאת בתאריך ${departureDate} ותימשך כ-${flightDuration} שעות.`;
-            document.getElementById("flightResult").innerText = resultText;
-        }
-
-        function toggleGame() {
-            let gameArea = document.createElement('div');
-            gameArea.innerHTML = `<h3>המשחק הזעם! לחוץ את העכבר כמה שיותר מהר!</h3>`;
-            gameArea.style.width = "200px";
-            gameArea.style.height = "200px";
-            gameArea.style.border = "2px solid red";
-            gameArea.style.textAlign = "center";
-            document.body.appendChild(gameArea);
-
-            let clickCount = 0;
-            gameArea.addEventListener("click", function() {
-                clickCount++;
-                gameArea.innerHTML = `<h3>לחצת ${clickCount} פעמים!</h3>`;
+            if (!days || isNaN(days) || days <= 0) {
+                alert("נא להזין מספר ימים תקין");
+                return;
+            }
+            let surcharge = countrySurcharges[destination];
+            airlines.filter(airline => airlineChoice === "all" || airline.name === airlineChoice).forEach(airline => {
+                let price = (airline.basePrice * surcharge * days).toFixed(2);
+                let li = document.createElement("li");
+                li.innerText = `${airline.name}: ${price} ₪`;
+                list.appendChild(li);
+                totalPrice += parseFloat(price); // חישוב המחיר הכולל
             });
-        }
 
-        function openSettings() {
-            alert("הגדרות נגישות פותחו!");
+            // הצגת המחיר הכולל
+            document.getElementById("totalPrice").innerText = `המחיר הכולל לטיסות: ${totalPrice.toFixed(2)} ₪`;
         }
     </script>
+
+    <footer>
+        <p>By itapita's site</p>
+    </footer>
 </body>
 </html>
