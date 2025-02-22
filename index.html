@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ממיר מטבע, טיסות ותפריט צדדי עם לחצנים כיפים</title>
+  <title>ממיר מטבע, טיסות ותפריט צדדי עם התחברות</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -11,12 +11,56 @@
       margin: 0;
       overflow: hidden;
     }
-    /* עיצוב התוכן המרכזי */
+    /* סגנון חלון ההתחברות */
+    #loginModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+    #loginModal .modal-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      max-width: 350px;
+      width: 90%;
+      text-align: center;
+    }
+    #loginModal input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    #loginModal button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #ff6a00, #ee0979);
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    #loginModal button:hover {
+      transform: scale(1.05);
+    }
+    /* תצוגה מרכזית */
     .main-content {
       text-align: center;
       padding: 20px;
       margin-right: 220px; /* מקום לתפריט הצדדי */
       color: #333;
+      display: none;
     }
     .container {
       background: rgba(255, 255, 255, 0.95);
@@ -123,6 +167,16 @@
   </style>
 </head>
 <body>
+  <!-- חלון התחברות -->
+  <div id="loginModal">
+    <div class="modal-content">
+      <h2>התחבר</h2>
+      <input type="email" id="email" placeholder="כתובת אימייל" required>
+      <input type="password" id="password" placeholder="סיסמה" required>
+      <button onclick="signIn()">התחבר</button>
+    </div>
+  </div>
+
   <!-- תצוגת שערי החליפין -->
   <div id="exchangeRates">
     <p>USD: <span id="usdRate">...</span></p>
@@ -138,7 +192,7 @@
   </div>
 
   <!-- התוכן המרכזי -->
-  <div class="main-content">
+  <div class="main-content" id="mainContent">
     <!-- המרת מטבע -->
     <div class="container">
       <h2>המרת מטבע</h2>
@@ -175,6 +229,21 @@
   </div>
 
   <script>
+    // פונקציית התחברות – כאן לדוגמה מתבצעת בדיקה פשוטה (למשל, נדרש שהשדות לא יהיו ריקים)
+    function signIn() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      if(email === "" || password === "") {
+        alert("נא למלא את כל השדות");
+        return;
+      }
+      // בדיקה לדוגמה – ניתן להחליף בקריאה לשרת לבדיקת התחברות
+      // במקרה זה, נסמן את המשתמש כמחובר ונעל את חלון ההתחברות
+      document.getElementById("loginModal").style.display = "none";
+      // נחשוף את התוכן המרכזי
+      document.getElementById("mainContent").style.display = "block";
+    }
+
     // עדכון שערי חליפין באמצעות API (בסיס ILS)
     async function fetchExchangeRates() {
       try {
