@@ -3,23 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ממיר מטבע ומחירי טיסות</title>
+  <title>ממיר מטבע, טיסות ותפריט צדדי</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
-      text-align: center;
-      padding: 20px;
       margin: 0;
       overflow: hidden;
+    }
+    /* תצוגה מרכזית */
+    .main-content {
+      text-align: center;
+      padding: 20px;
+      margin-right: 200px; /* מקום לתפריט הצדדי */
     }
     .container {
       background: white;
       padding: 20px;
+      margin: 20px auto;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       max-width: 400px;
-      margin: 20px auto;
     }
     input, select, button {
       width: 100%;
@@ -33,6 +37,7 @@
       color: white;
       cursor: pointer;
     }
+    /* תצוגת שערי החליפין */
     #exchangeRates {
       position: absolute;
       top: 10px;
@@ -42,6 +47,7 @@
       border-radius: 5px;
       z-index: 100;
     }
+    /* כפתור אקראי */
     #realButton {
       position: absolute;
       background-color: green;
@@ -50,6 +56,29 @@
       border-radius: 5px;
       border: none;
       cursor: pointer;
+    }
+    /* תפריט צדדי */
+    #sideButtons {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 180px;
+      height: 100%;
+      background: #333;
+      color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    #sideButtons h3 {
+      margin-top: 0;
+      font-size: 1.2em;
+      text-align: center;
+    }
+    #sideButtons button {
+      background-color: #555;
+      color: #fff;
+      margin-bottom: 10px;
+      width: 100%;
     }
   </style>
 </head>
@@ -60,39 +89,50 @@
     <p>שער EUR: <span id="eurRate">...</span></p>
   </div>
 
-  <!-- המרת מטבע -->
-  <div class="container">
-    <h2>המרת מטבע</h2>
-    <input type="number" id="amount" placeholder="הזן סכום">
-    <select id="currency">
-      <option value="usd">דולר ($)</option>
-      <option value="eur">יורו (€)</option>
-    </select>
-    <button onclick="convertCurrency()">המר</button>
-    <p id="result"></p>
+  <!-- תפריט צדדי עם כפתורים נוספים -->
+  <div id="sideButtons">
+    <h3>פעולות נוספות</h3>
+    <button onclick="onCollectResource()">איסוף משאב</button>
+    <button onclick="alert(sanitizeInput('<script>alert(1)</script>'))">בדיקת קלט</button>
+    <button onclick="randomizeButtonPosition()">שנה מיקום כפתור</button>
   </div>
 
-  <!-- חיפוש טיסות -->
-  <div class="container">
-    <h2>חיפוש טיסות</h2>
-    <input type="text" id="destination" placeholder="בחר יעד (למשל: ישראל, בריטניה, הולנד, גרמניה, צרפת, ספרד, יפן, ארצות הברית, קנדה, אוסטרליה, סין, איטליה, שוויץ)">
-    <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
-    <select id="airline">
-      <option value="all">בחר חברת תעופה</option>
-      <option value="אל על">אל על</option>
-      <option value="ריינאייר">ריינאייר</option>
-      <option value="אייר פראנס">אייר פראנס</option>
-      <option value="טורקיש איירליינס">טורקיש איירליינס</option>
-      <option value="לופטהנזה">לופטהנזה</option>
-      <option value="וויז אייר">וויז אייר</option>
-    </select>
-    <button onclick="calculateFlights()">חשב מחירי טיסות</button>
-    <ul id="flightPrices"></ul>
-  </div>
+  <!-- התוכן המרכזי -->
+  <div class="main-content">
+    <!-- המרת מטבע -->
+    <div class="container">
+      <h2>המרת מטבע</h2>
+      <input type="number" id="amount" placeholder="הזן סכום">
+      <select id="currency">
+        <option value="usd">דולר ($)</option>
+        <option value="eur">יורו (€)</option>
+      </select>
+      <button onclick="convertCurrency()">המר</button>
+      <p id="result"></p>
+    </div>
 
-  <!-- כפתור אקראי לאימות -->
-  <p>לחץ על הכפתור הירוק כדי להמשיך</p>
-  <button id="realButton">לחץ כאן</button>
+    <!-- חיפוש טיסות -->
+    <div class="container">
+      <h2>חיפוש טיסות</h2>
+      <input type="text" id="destination" placeholder="בחר יעד (למשל: ישראל, בריטניה, הולנד, גרמניה, צרפת, ספרד, יפן, ארצות הברית, קנדה, אוסטרליה, סין, איטליה, שוויץ)">
+      <input type="number" id="days" placeholder="מספר ימים בחו&quot;ל">
+      <select id="airline">
+        <option value="all">בחר חברת תעופה</option>
+        <option value="אל על">אל על</option>
+        <option value="ריינאייר">ריינאייר</option>
+        <option value="אייר פראנס">אייר פראנס</option>
+        <option value="טורקיש איירליינס">טורקיש איירליינס</option>
+        <option value="לופטהנזה">לופטהנזה</option>
+        <option value="וויז אייר">וויז אייר</option>
+      </select>
+      <button onclick="calculateFlights()">חשב מחירי טיסות</button>
+      <ul id="flightPrices"></ul>
+    </div>
+
+    <!-- כפתור אקראי לאימות -->
+    <p>לחץ על הכפתור הירוק כדי להמשיך</p>
+    <button id="realButton">לחץ כאן</button>
+  </div>
 
   <script>
     // עדכון שערי חליפין באמצעות API (בסיס ILS)
@@ -100,8 +140,7 @@
       try {
         const response = await fetch('https://api.exchangerate-api.com/v4/latest/ILS');
         const data = await response.json();
-        // data.rates מכיל את שערי החליפין, כאשר לדוגמה data.rates.USD הוא כמה יחידות דולר שווים ל-1 ILS
-        // לכן, כדי לדעת כמה ILS שווה 1 דולר, מחשבים את ההיפוך
+        // מחשבים את ההיפוך: כמה ILS שווה 1 דולר/יורו
         document.getElementById('usdRate').textContent = (1 / data.rates.USD).toFixed(4);
         document.getElementById('eurRate').textContent = (1 / data.rates.EUR).toFixed(4);
       } catch (error) {
@@ -121,12 +160,8 @@
         alert("נא להזין סכום תקין");
         return;
       }
-      let rate;
-      if (currency === "usd") {
-        rate = parseFloat(document.getElementById('usdRate').textContent);
-      } else {
-        rate = parseFloat(document.getElementById('eurRate').textContent);
-      }
+      let rate = (currency === "usd") ? parseFloat(document.getElementById('usdRate').textContent)
+                                     : parseFloat(document.getElementById('eurRate').textContent);
       if (!rate || isNaN(rate)) {
         alert("השער אינו זמין כרגע, נסה מאוחר יותר");
         return;
@@ -200,7 +235,7 @@
       }
       lastActionTime = now;
       // כאן תוכל להפעיל את פונקציית איסוף המשאב שלך
-      // collectResource();
+      alert("משאב נאסף!");
     }
 
     // אבטחת קלט – מניעת הזרקת HTML
@@ -222,7 +257,7 @@
     randomizeButtonPosition();
   </script>
   
-  <footer>
+  <footer style="text-align: center; margin-top: 20px;">
     <p>By itapita's site</p>
   </footer>
 </body>
