@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ממיר מטבע ומחירי טיסות</title>
+    <title>ממיר מטבע, מחירי טיסות ולינה</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,15 +36,14 @@
             font-size: 14px;
             color: #888;
         }
-        body { margin: 0; overflow: hidden; }
-        #exchangeRates {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255,255,255,0.8);
-            padding: 10px;
+        #scrollButton {
+            margin-top: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
             border-radius: 5px;
-            z-index: 100;
         }
     </style>
 </head>
@@ -65,44 +64,34 @@
         <input type="text" id="destination" placeholder="בחר יעד">
         <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
         <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1">
-        <select id="airline">
-            <option value="all">בחר חברת תעופה</option>
-            <option value="אל על">אל על</option>
-            <option value="ריינאייר">ריינאייר</option>
-            <option value="אייר פראנס">אייר פראנס</option>
-            <option value="טורקיש איירליינס">טורקיש איירליינס</option>
-            <option value="לופטהנזה">לופטהנזה</option>
-            <option value="וויז אייר">וויז אייר</option>
-        </select>
-
         <button onclick="calculateFlights()">חשב מחירי טיסות</button>
         <ul id="flightPrices"></ul>
-        <p id="finalPrice"></p> <!-- הוספתי את התווית כאן -->
+        <p id="finalPrice"></p>
     </div>
 
-    <div id="exchangeRates">
-        <p>שער USD: <span id="usdRate">...</span></p>
-        <p>שער EUR: <span id="eurRate">...</span></p>
+    <div class="container">
+        <h2>חיפוש לינה</h2>
+        <input type="text" id="hotelDestination" placeholder="בחר יעד לחופשה">
+        <select id="hotelType">
+            <option value="standard">חדר רגיל</option>
+            <option value="luxury">חדר יוקרה</option>
+            <option value="budget">חדר בתקציב נמוך</option>
+        </select>
+        <button onclick="findHotel()">חפש לינה</button>
+        <ul id="hotelPrices"></ul>
+        <p id="hotelFinalPrice"></p>
     </div>
+
+    <!-- כפתור גלילה למטה -->
+    <button id="scrollButton" onclick="scrollToBottom()">לרדת למטה</button>
 
     <script>
-        // --- חלק של עדכון שערי חליפין ---
-        async function fetchExchangeRates() {
-            try {
-                const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-                const data = await response.json();
-                document.getElementById('usdRate').textContent = data.rates.USD;
-                document.getElementById('eurRate').textContent = data.rates.EUR;
-            } catch (error) {
-                console.error('שגיאה בקבלת שערי החליפין:', error);
-            }
+        // פונקציה לגלול למטה
+        function scrollToBottom() {
+            window.scrollTo(0, document.body.scrollHeight);
         }
 
-        // קריאה ראשונית ועדכון כל 5 שניות
-        fetchExchangeRates();
-        setInterval(fetchExchangeRates, 5000);
-
-        // --- לוגיקה להמרת מטבע ---
+        // פונקציה להמרת מטבע
         const rates = { usd: 3.56, eur: 3.73 };
         function convertCurrency() {
             let amount = document.getElementById("amount").value;
@@ -115,59 +104,19 @@
             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
         }
 
-        // --- לוגיקה למחירי טיסות ---
+        // לוגיקה לחישוב מחירי טיסות
         const countrySurcharges = {
             "ישראל": 1.0,
             "בריטניה": 1.15,
             "הולנד": 1.10,
             "גרמניה": 1.08,
             "צרפת": 1.05,
-            "ספרד": 1.20,
-            "יפן": 1.18,
-            "ארצות הברית": 1.12,
-            "קנדה": 1.14,
-            "איטליה": 1.09,
-            "סין": 1.22,
-            "אוסטרליה": 1.25,
-            "הודו": 1.30,
-            "ברזיל": 1.28,
-            "רוסיה": 1.35,
-            "דרום אפריקה": 1.32,
-            "מקסיקו": 1.27,
-            "קוריאה הדרומית": 1.21,
-            "טורקיה": 1.19,
-            "שוודיה": 1.11,
-            "נורווגיה": 1.13,
-            "פינלנד": 1.10,
-            "דנמרק": 1.12,
-            "שווייץ": 1.07,
-            "יוון": 1.16,
-            "פורטוגל": 1.15,
-            "פולין": 1.14,
-            "צ'כיה": 1.13,
-            "הונגריה": 1.12,
-            "אוסטריה": 1.10,
-            "בלגיה": 1.09,
-            "ניו זילנד": 1.26,
-            "תאילנד": 1.30,
-            "ארגנטינה": 1.18,
-            "צ'ילה": 1.25,
-            "פנמה": 1.20
+            "ספרד": 1.20
         };
-
-        const airlines = [
-            { name: "אל על", basePrice: 320 },
-            { name: "ריינאייר", basePrice: 270 },
-            { name: "אייר פראנס", basePrice: 300 },
-            { name: "טורקיש איירליינס", basePrice: 350 },
-            { name: "לופטהנזה", basePrice: 380 },
-            { name: "וויז אייר", basePrice: 250 }
-        ];
 
         function calculateFlights() {
             let destination = document.getElementById("destination").value;
             let days = document.getElementById("days").value;
-            let airlineChoice = document.getElementById("airline").value;
             let passengerCount = document.getElementById("passengerCount").value || 1;
             let list = document.getElementById("flightPrices");
             let finalPriceElement = document.getElementById("finalPrice");
@@ -185,10 +134,14 @@
 
             let surcharge = countrySurcharges[destination];
             let totalPrice = 0;
+            let airlines = [
+                { name: "אל על", basePrice: 320 },
+                { name: "ריינאייר", basePrice: 270 }
+            ];
 
-            airlines.filter(airline => airlineChoice === "all" || airline.name === airlineChoice).forEach(airline => {
+            airlines.forEach(airline => {
                 let basePrice = airline.basePrice * surcharge;
-                let price = basePrice + (basePrice * (passengerCount - 1) * 0.9); // הנחה קלילה לפי כמות נוסעים
+                let price = basePrice + (basePrice * (passengerCount - 1) * 0.9); 
                 let li = document.createElement("li");
                 li.innerText = `${airline.name}: ${price.toFixed(2)} ₪`;
                 list.appendChild(li);
@@ -197,10 +150,35 @@
 
             finalPriceElement.innerText = `המחיר הכולל: ${totalPrice.toFixed(2)} ₪`;
         }
+
+        // לוגיקה לחיפוש לינה
+        const hotelPrices = {
+            standard: 200,
+            luxury: 500,
+            budget: 150
+        };
+
+        function findHotel() {
+            let hotelDestination = document.getElementById("hotelDestination").value;
+            let hotelType = document.getElementById("hotelType").value;
+            let hotelList = document.getElementById("hotelPrices");
+            let hotelFinalPriceElement = document.getElementById("hotelFinalPrice");
+
+            hotelList.innerHTML = "";
+            hotelFinalPriceElement.innerHTML = "";
+
+            if (!hotelDestination) {
+                alert("נא להזין יעד לחופשה");
+                return;
+            }
+
+            let price = hotelPrices[hotelType];
+            let li = document.createElement("li");
+            li.innerText = `מחיר חדר ${hotelType}: ${price} ₪`;
+            hotelList.appendChild(li);
+            hotelFinalPriceElement.innerText = `מחיר הסופי: ${price} ₪`;
+        }
     </script>
 
-    <footer>
-        <p>By itapita's site</p>
-    </footer>
 </body>
 </html>
