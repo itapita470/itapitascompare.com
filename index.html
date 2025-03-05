@@ -74,6 +74,7 @@
             <option value="וויז אייר">וויז אייר</option>
         </select>
 
+        <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1">
         <button onclick="calculateFlights()">חשב מחירי טיסות</button>
         <ul id="flightPrices"></ul>
         <p id="finalPrice"></p> 
@@ -173,6 +174,7 @@
         function calculateFlights() {
             let destination = document.getElementById("destination").value;
             let airlineChoice = document.getElementById("airline").value;
+            let passengerCount = document.getElementById("passengerCount").value || 1;
             let list = document.getElementById("flightPrices");
             let finalPriceElement = document.getElementById("finalPrice");
             list.innerHTML = "";
@@ -187,7 +189,7 @@
             let totalPrice = 0;
 
             airlines.filter(airline => airlineChoice === "all" || airline.name === airlineChoice).forEach(airline => {
-                let price = (airline.basePrice * surcharge).toFixed(2); // המחיר לא תלוי בימים
+                let price = (airline.basePrice * surcharge * passengerCount).toFixed(2);
                 let li = document.createElement("li");
                 li.innerText = `${airline.name}: ${price} ₪`;
                 list.appendChild(li);
