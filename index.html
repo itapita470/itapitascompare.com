@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ממיר מטבע ומחירי טיסות</title>
+    <title>ממיר מטבע, מחירי טיסות ואפשרויות לינה</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -77,7 +77,23 @@
 
         <button onclick="calculateFlights()">חשב מחירי טיסות</button>
         <ul id="flightPrices"></ul>
-        <p id="finalPrice"></p> <!-- הוספתי את התווית כאן -->
+        <p id="finalPrice"></p>
+    </div>
+
+    <div class="container">
+        <h2>אפשרויות לינה</h2>
+        <select id="accommodation">
+            <option value="hotel">מלון</option>
+            <option value="hostel">הוסטל</option>
+            <option value="apartment">דירה פרטית</option>
+            <option value="resort">ריזורט</option>
+            <option value="bnb">B&B</option>
+            <option value="camping">קמפינג</option>
+            <option value="luxury">לינה יוקרתית</option>
+        </select>
+        <input type="number" id="accommodationNights" placeholder="מספר לילות">
+        <button onclick="calculateAccommodation()">חשב מחיר לינה</button>
+        <p id="accommodationPrice"></p>
     </div>
 
     <div id="exchangeRates">
@@ -196,6 +212,32 @@
 
             // הצגת המחיר הסופי
             finalPriceElement.innerText = `המחיר הכולל: ${totalPrice.toFixed(2)} ₪`;
+        }
+
+        // --- לוגיקה למחירי לינה ---
+        const accommodationPrices = {
+            hotel: 300,
+            hostel: 100,
+            apartment: 200,
+            resort: 500,
+            bnb: 150,
+            camping: 50,
+            luxury: 800
+        };
+
+        function calculateAccommodation() {
+            let accommodationType = document.getElementById("accommodation").value;
+            let nights = document.getElementById("accommodationNights").value;
+            let priceElement = document.getElementById("accommodationPrice");
+
+            if (!nights || isNaN(nights) || nights <= 0) {
+                alert("נא להזין מספר לילות תקין");
+                return;
+            }
+
+            let pricePerNight = accommodationPrices[accommodationType];
+            let totalPrice = (pricePerNight * nights).toFixed(2);
+            priceElement.innerText = `מחיר הלינה הכולל: ${totalPrice} ₪`;
         }
     </script>
 
