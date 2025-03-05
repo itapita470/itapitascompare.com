@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ממיר מטבע, מחירי טיסות ואפשרויות לינה</title>
+    <title>ממיר מטבע, מחירי טיסות ולינה</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -63,8 +63,7 @@
     <div class="container">
         <h2>חיפוש טיסות</h2>
         <input type="text" id="destination" placeholder="בחר יעד">
-        <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
-
+        
         <select id="airline">
             <option value="all">בחר חברת תעופה</option>
             <option value="אל על">אל על</option>
@@ -77,23 +76,14 @@
 
         <button onclick="calculateFlights()">חשב מחירי טיסות</button>
         <ul id="flightPrices"></ul>
-        <p id="finalPrice"></p>
+        <p id="finalPrice"></p> 
     </div>
 
     <div class="container">
-        <h2>אפשרויות לינה</h2>
-        <select id="accommodation">
-            <option value="hotel">מלון</option>
-            <option value="hostel">הוסטל</option>
-            <option value="apartment">דירה פרטית</option>
-            <option value="resort">ריזורט</option>
-            <option value="bnb">B&B</option>
-            <option value="camping">קמפינג</option>
-            <option value="luxury">לינה יוקרתית</option>
-        </select>
-        <input type="number" id="accommodationNights" placeholder="מספר לילות">
-        <button onclick="calculateAccommodation()">חשב מחיר לינה</button>
-        <p id="accommodationPrice"></p>
+        <h2>חיפוש לינה</h2>
+        <input type="text" id="accommodationDestination" placeholder="בחר יעד לינה">
+        <button onclick="fetchAccommodationPrices()">חפש לינה</button>
+        <ul id="accommodationList"></ul>
     </div>
 
     <div id="exchangeRates">
@@ -105,7 +95,6 @@
         // --- חלק של עדכון שערי חליפין ---
         async function fetchExchangeRates() {
             try {
-                // שימוש ב-API חינמי לשערי חליפין
                 const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
                 const data = await response.json();
                 document.getElementById('usdRate').textContent = data.rates.USD;
@@ -166,7 +155,7 @@
             "אוסטריה": 1.10,
             "בלגיה": 1.09,
             "ניו זילנד": 1.26,
-            "תאילנד": 1.30, // הוספתי את תאילנד כאן
+            "תאילנד": 1.30,
             "ארגנטינה": 1.18,
             "צ'ילה": 1.25,
             "פנמה": 1.20
@@ -183,7 +172,6 @@
 
         function calculateFlights() {
             let destination = document.getElementById("destination").value;
-            let days = document.getElementById("days").value;
             let airlineChoice = document.getElementById("airline").value;
             let list = document.getElementById("flightPrices");
             let finalPriceElement = document.getElementById("finalPrice");
@@ -194,50 +182,44 @@
                 alert("נא לבחור יעד תקני");
                 return;
             }
-            if (!days || isNaN(days) || days <= 0) {
-                alert("נא להזין מספר ימים תקין");
-                return;
-            }
 
             let surcharge = countrySurcharges[destination];
             let totalPrice = 0;
 
             airlines.filter(airline => airlineChoice === "all" || airline.name === airlineChoice).forEach(airline => {
-                let price = (airline.basePrice * surcharge * days).toFixed(2);
+                let price = (airline.basePrice * surcharge).toFixed(2); // המחיר לא תלוי בימים
                 let li = document.createElement("li");
                 li.innerText = `${airline.name}: ${price} ₪`;
                 list.appendChild(li);
                 totalPrice += parseFloat(price);
             });
 
-            // הצגת המחיר הסופי
             finalPriceElement.innerText = `המחיר הכולל: ${totalPrice.toFixed(2)} ₪`;
         }
 
         // --- לוגיקה למחירי לינה ---
-        const accommodationPrices = {
-            hotel: 300,
-            hostel: 100,
-            apartment: 200,
-            resort: 500,
-            bnb: 150,
-            camping: 50,
-            luxury: 800
-        };
+        async function fetchAccommodationPrices() {
+            try {
+                const destination = document.getElementById("accommodationDestination").value;
+                if (!destination) {
+                    alert("נא להזין יעד לינה");
+                    return;
+                }
 
-        function calculateAccommodation() {
-            let accommodationType = document.getElementById("accommodation").value;
-            let nights = document.getElementById("accommodationNights").value;
-            let priceElement = document.getElementById("accommodationPrice");
+                const response = await fetch(`https://api.example.com/accommodation?destination=${destination}`);
+                const data = await response.json();
 
-            if (!nights || isNaN(nights) || nights <= 0) {
-                alert("נא להזין מספר לילות תקין");
-                return;
+                const accommodationList = document.getElementById('accommodationList');
+                accommodationList.innerHTML = ''; 
+
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = `${item.name}: ${item.price} ₪`;
+                    accommodationList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('שגיאה בקבלת מחירים של לינה:', error);
             }
-
-            let pricePerNight = accommodationPrices[accommodationType];
-            let totalPrice = (pricePerNight * nights).toFixed(2);
-            priceElement.innerText = `מחיר הלינה הכולל: ${totalPrice} ₪`;
         }
     </script>
 
