@@ -82,16 +82,13 @@
         <p id="hotelFinalPrice"></p>
     </div>
 
-    <!-- כפתור גלילה למטה -->
     <button id="scrollButton" onclick="scrollToBottom()">לרדת למטה</button>
 
     <script>
-        // פונקציה לגלול למטה
         function scrollToBottom() {
             window.scrollTo(0, document.body.scrollHeight);
         }
 
-        // פונקציה להמרת מטבע
         const rates = { usd: 3.56, eur: 3.73 };
         function convertCurrency() {
             let amount = document.getElementById("amount").value;
@@ -104,14 +101,14 @@
             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
         }
 
-        // לוגיקה לחישוב מחירי טיסות
         const countrySurcharges = {
-            "ישראל": 1.0,
-            "בריטניה": 1.15,
-            "הולנד": 1.10,
-            "גרמניה": 1.08,
-            "צרפת": 1.05,
-            "ספרד": 1.20
+            "ישראל": 1.0, "בריטניה": 1.15, "הולנד": 1.10, "גרמניה": 1.08, "צרפת": 1.05, "ספרד": 1.20,
+            "דובאי": 1.30, "ארה\"ב": 1.40, "איטליה": 1.16, "יוון": 1.18, "קנדה": 1.30, "תאילנד": 1.25,
+            "אוסטרליה": 1.30, "יפן": 1.35, "סין": 1.38, "אוקראינה": 1.18, "ברזיל": 1.32, "רוסיה": 1.35,
+            "פורטוגל": 1.22, "מקסיקו": 1.28, "הודו": 1.15, "דרום אפריקה": 1.26, "טורקיה": 1.12, "שוודיה": 1.14,
+            "נורווגיה": 1.17, "שווייץ": 1.25, "פינלנד": 1.16, "דרום קוריאה": 1.33, "מצרים": 1.10, "מרוקו": 1.09,
+            "ארגנטינה": 1.31, "צ'ילה": 1.27, "ניו זילנד": 1.29, "פולין": 1.12, "צ'כיה": 1.11, "אוסטריה": 1.13,
+            "בלגיה": 1.12, "הונגריה": 1.10, "סינגפור": 1.34, "מלזיה": 1.20, "אינדונזיה": 1.18, "פיליפינים": 1.19
         };
 
         function calculateFlights() {
@@ -136,12 +133,14 @@
             let totalPrice = 0;
             let airlines = [
                 { name: "אל על", basePrice: 320 },
-                { name: "ריינאייר", basePrice: 270 }
+                { name: "ריינאייר", basePrice: 270 },
+                { name: "לופטהנזה", basePrice: 350 },
+                { name: "טורקיש איירליינס", basePrice: 300 }
             ];
 
             airlines.forEach(airline => {
                 let basePrice = airline.basePrice * surcharge;
-                let price = basePrice + (basePrice * (passengerCount - 1) * 0.9); 
+                let price = basePrice + (basePrice * (passengerCount - 1) * 0.9);
                 let li = document.createElement("li");
                 li.innerText = `${airline.name}: ${price.toFixed(2)} ₪`;
                 list.appendChild(li);
@@ -151,12 +150,7 @@
             finalPriceElement.innerText = `המחיר הכולל: ${totalPrice.toFixed(2)} ₪`;
         }
 
-        // לוגיקה לחיפוש לינה
-        const hotelPrices = {
-            standard: 200,
-            luxury: 500,
-            budget: 150
-        };
+        const hotelPrices = { standard: 200, luxury: 500, budget: 150 };
 
         function findHotel() {
             let hotelDestination = document.getElementById("hotelDestination").value;
