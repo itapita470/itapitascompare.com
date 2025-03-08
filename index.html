@@ -57,40 +57,9 @@
         h2 {
             color: #ff5733;
         }
-
-        /* קישוטים לפורים */
-        .holiday-decoration {
-            position: absolute;
-            top: 10%;
-            left: 0;
-            right: 0;
-            z-index: -1;
-        }
-        /* אנימציה לקישוטים לפורים */
-        .confetti {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: confetti 5s infinite;
-        }
-
-        @keyframes confetti {
-            0% { opacity: 1; transform: translateY(0) rotate(0deg); }
-            100% { opacity: 0; transform: translateY(100vh) rotate(360deg); }
-        }
     </style>
 </head>
 <body>
-
-    <!-- קישוטים לפורים -->
-    <div id="holidayDecoration" class="holiday-decoration">
-        <div class="confetti">
-            <img src="assets/images/party-decoration.png" alt="קונפטי" width="50" />
-            <img src="assets/images/party-decoration.png" alt="קונפטי" width="50" />
-            <img src="assets/images/party-decoration.png" alt="קונפטי" width="50" />
-        </div>
-    </div>
 
     <div class="container">
         <h2>המרת מטבע</h2>
@@ -117,54 +86,24 @@
     <div class="container">
         <h2>חיפוש לינה</h2>
         <input type="text" id="hotelDestination" placeholder="בחר יעד לחופשה">
-        <select id="hotelType">
-            <option value="standard">חדר רגיל</option>
-            <option value="luxury">חדר יוקרה</option>
-            <option value="budget">חדר בתקציב נמוך</option>
+        <select id="hotelSelect">
+            <option value="telaviv">תל אביב</option>
+            <option value="jerusalem">ירושלים</option>
+            <option value="eilat">אילת</option>
+            <option value="haifa">חיפה</option>
+            <option value="netanya">נתניה</option>
         </select>
         <button onclick="findHotel()">חפש לינה</button>
         <ul id="hotelPrices"></ul>
         <p id="hotelFinalPrice"></p>
     </div>
 
-    <!-- כפתור גלילה למטה -->
     <button id="scrollButton" onclick="scrollToBottom()">לרדת למטה</button>
 
     <script>
-        // פונקציה להורדת קישוטים לפי חג
-        function setHolidayDecoration() {
-            const now = new Date();
-            const month = now.getMonth() + 1; // חודש (מתחיל ב-0)
-            const holidayDecoration = document.getElementById("holidayDecoration");
-
-            // קישוטים לפסח
-            if (month === 4) {
-                holidayDecoration.innerHTML = '<img src="assets/images/passover-decoration.png" alt="פסח" width="100" />';
-            }
-            // קישוטים לשבועות
-            else if (month === 5) {
-                holidayDecoration.innerHTML = '<img src="assets/images/shavuot-decoration.png" alt="שבועות" width="100" />';
-            }
-            // קישוטים לחג הסוכות
-            else if (month === 9) {
-                holidayDecoration.innerHTML = '<img src="assets/images/sukkot-decoration.png" alt="סוכות" width="100" />';
-            }
-            // קישוטים לחג החנוכה
-            else if (month === 12) {
-                holidayDecoration.innerHTML = '<img src="assets/images/hanukkah-decoration.png" alt="חנוכה" width="100" />';
-            } else {
-                holidayDecoration.innerHTML = '<img src="assets/images/party-decoration.png" alt="קונפטי" width="50" />';
-            }
-        }
-
-        // קריאה לפונקציה לעדכון קישוטים אוטומטי
-        setHolidayDecoration();
-
-        function scrollToBottom() {
-            window.scrollTo(0, document.body.scrollHeight);
-        }
-
+        // פונקציה להמרת מטבע לשקל
         const rates = { usd: 3.56, eur: 3.73 };
+
         function convertCurrency() {
             let amount = document.getElementById("amount").value;
             let currency = document.getElementById("currency").value;
@@ -176,6 +115,7 @@
             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
         }
 
+        // חישוב מחירי טיסות
         const countrySurcharges = {
             "ישראל": 1.0, "בריטניה": 1.15, "הולנד": 1.10, "גרמניה": 1.08, "צרפת": 1.05, "ספרד": 1.20,
             "דובאי": 1.30, "ארה\"ב": 1.40, "איטליה": 1.16, "יוון": 1.18, "קנדה": 1.30, "תאילנד": 1.25,
@@ -219,7 +159,7 @@
 
             // חישוב מחיר הטיסה עם התוספת של הזמן
             let airlines = [
-                { name: "אל על", basePrice: 1000 } // שדרוג למחיר בסיסי יותר גבוה
+                { name: "אל על", basePrice: 3700 } // מחיר בסיסי
             ];
 
             airlines.forEach(airline => {
@@ -234,11 +174,14 @@
             finalPriceElement.innerText = `המחיר הכולל: ${totalPrice.toFixed(2)} ₪`;
         }
 
-        const hotelPrices = { standard: 200, luxury: 500, budget: 150 };
+        // חיפוש לינה
+        const hotelPrices = {
+            "telaviv": 300, "jerusalem": 250, "eilat": 350, "haifa": 200, "netanya": 270
+        };
 
         function findHotel() {
             let hotelDestination = document.getElementById("hotelDestination").value;
-            let hotelType = document.getElementById("hotelType").value;
+            let hotelSelect = document.getElementById("hotelSelect").value;
             let hotelList = document.getElementById("hotelPrices");
             let hotelFinalPriceElement = document.getElementById("hotelFinalPrice");
             hotelList.innerHTML = "";
@@ -249,9 +192,13 @@
                 return;
             }
 
-            let price = hotelPrices[hotelType];
-            hotelList.innerHTML = `<li>מחיר חדר: ${price} ₪</li>`;
-            hotelFinalPriceElement.innerText = `מחיר כולל לחדר: ${price} ₪`;
+            let price = hotelPrices[hotelSelect];
+            hotelList.innerHTML = `<li>מחיר ללילה: ${price} ₪</li>`;
+            hotelFinalPriceElement.innerText = `מחיר כולל ללינה: ${price} ₪`;
+        }
+
+        function scrollToBottom() {
+            window.scrollTo(0, document.body.scrollHeight);
         }
     </script>
 </body>
