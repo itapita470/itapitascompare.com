@@ -110,7 +110,6 @@
         <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
         <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1">
         <button onclick="calculateFlights()">חשב מחירי טיסות</button>
-        <ul id="flightPrices"></ul>
         <p id="finalPrice"></p>
     </div>
 
@@ -187,9 +186,7 @@
             let departureDate = document.getElementById("departureDate").value;
             let days = document.getElementById("days").value;
             let passengerCount = document.getElementById("passengerCount").value || 1;
-            let list = document.getElementById("flightPrices");
             let finalPriceElement = document.getElementById("finalPrice");
-            list.innerHTML = "";
             finalPriceElement.innerHTML = "";
 
             if (!destination || !countrySurcharges[destination]) {
@@ -213,9 +210,6 @@
                 let pricePerPassenger = basePrice + (basePrice * 0.9); // תיקון לחישוב המחיר לכל נוסע.
                 let totalAirlinePrice = pricePerPassenger * passengerCount * 2; // הכפלת המחיר פי 2 עבור כל נוסע נוסף.
                 
-                let li = document.createElement("li");
-                li.innerText = `${airline.name}: ${pricePerPassenger.toFixed(2)} ₪ לנוסע, סה"כ: ${totalAirlinePrice.toFixed(2)} ₪`;
-                list.appendChild(li);
                 totalPrice += totalAirlinePrice; // חישוב המחיר הכולל לכל חברות התעופה.
             });
 
