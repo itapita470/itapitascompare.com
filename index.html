@@ -7,29 +7,37 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             text-align: center;
             padding: 20px;
+            background-color: #ffecb3;
+            background-image: url('https://cdn.pixabay.com/photo/2021/01/06/20/06/abstract-5892352_960_720.jpg');
+            background-size: cover;
+            background-position: center;
         }
         .container {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             margin: auto;
+            border: 3px solid #ff5733;
         }
         input, select, button {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border: 1px solid #ccc;
+            border: 1px solid #ff5733;
             border-radius: 5px;
+            font-size: 16px;
         }
         button {
-            background-color: #007bff;
+            background-color: #ff5733;
             color: white;
             cursor: pointer;
+        }
+        button:hover {
+            background-color: #ff4500;
         }
         footer {
             margin-top: 20px;
@@ -45,9 +53,32 @@
             cursor: pointer;
             border-radius: 5px;
         }
+        h2 {
+            color: #ff5733;
+        }
+        /* קישוטים לפי החג */
+        .holiday-decoration {
+            position: absolute;
+            top: 10%;
+            left: 0;
+            right: 0;
+            z-index: -1;
+            animation: confetti 5s infinite linear;
+        }
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+
+    <!-- קישוטים לפי החג -->
+    <div id="holidayDecoration" class="holiday-decoration">
+        <!-- כרגע מדובר בקונפטי, אבל ניתן להחליף לפי החג -->
+        <img src="https://cdn.pixabay.com/photo/2017/03/01/18/17/party-2107435_960_720.png" alt="קונפטי" width="100" />
+    </div>
+
     <div class="container">
         <h2>המרת מטבע</h2>
         <input type="number" id="amount" placeholder="הזן סכום">
@@ -87,6 +118,35 @@
     <button id="scrollButton" onclick="scrollToBottom()">לרדת למטה</button>
 
     <script>
+        // פונקציה להורדת קישוטים לפי חג
+        function setHolidayDecoration() {
+            const now = new Date();
+            const month = now.getMonth() + 1; // חודש (מתחיל ב-0)
+            const holidayDecoration = document.getElementById("holidayDecoration");
+
+            // קישוטים לפסח
+            if (month === 4) {
+                holidayDecoration.innerHTML = '<img src="https://cdn.pixabay.com/photo/2021/04/02/10/50/passover-6165094_960_720.jpg" alt="פסח" width="100" />';
+            }
+            // קישוטים לשבועות
+            else if (month === 5) {
+                holidayDecoration.innerHTML = '<img src="https://cdn.pixabay.com/photo/2017/06/16/11/35/holiday-2407220_960_720.jpg" alt="שבועות" width="100" />';
+            }
+            // קישוטים לחג הסוכות
+            else if (month === 9) {
+                holidayDecoration.innerHTML = '<img src="https://cdn.pixabay.com/photo/2018/09/29/11/40/sukkot-3708704_960_720.jpg" alt="סוכות" width="100" />';
+            }
+            // קישוטים לחג החנוכה
+            else if (month === 12) {
+                holidayDecoration.innerHTML = '<img src="https://cdn.pixabay.com/photo/2017/12/05/07/36/menorah-2999939_960_720.jpg" alt="חנוכה" width="100" />';
+            } else {
+                holidayDecoration.innerHTML = '<img src="https://cdn.pixabay.com/photo/2017/03/01/18/17/party-2107435_960_720.png" alt="קונפטי" width="100" />';
+            }
+        }
+
+        // קריאה לפונקציה לעדכון קישוטים אוטומטי
+        setHolidayDecoration();
+
         function scrollToBottom() {
             window.scrollTo(0, document.body.scrollHeight);
         }
@@ -137,7 +197,7 @@
 
             airlines.forEach(airline => {
                 let basePrice = airline.basePrice * surcharge;
-                let price = basePrice + (basePrice * (passengerCount - 1) * 0.9);
+                let price = basePrice + (basePrice * (passengerCount - 1) * 0.15); // נוסעים נוספים
                 let li = document.createElement("li");
                 li.innerText = `${airline.name}: ${price.toFixed(2)} ₪`;
                 list.appendChild(li);
@@ -167,9 +227,8 @@
             let li = document.createElement("li");
             li.innerText = `מחיר חדר ${hotelType}: ${price} ₪`;
             hotelList.appendChild(li);
-            hotelFinalPriceElement.innerText = `מחיר הסופי: ${price} ₪`;
+            hotelFinalPriceElement.innerText = `המחיר הכולל לחדר ${hotelType}: ${price} ₪`;
         }
     </script>
-
 </body>
 </html>
