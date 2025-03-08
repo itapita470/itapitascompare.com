@@ -110,6 +110,7 @@
         <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
         <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1">
         <button onclick="calculateFlights()">חשב מחירי טיסות</button>
+        <ul id="flightPrices"></ul>
         <p id="finalPrice"></p>
     </div>
 
@@ -186,7 +187,9 @@
             let departureDate = document.getElementById("departureDate").value;
             let days = document.getElementById("days").value;
             let passengerCount = document.getElementById("passengerCount").value || 1;
+            let list = document.getElementById("flightPrices");
             let finalPriceElement = document.getElementById("finalPrice");
+            list.innerHTML = "";
             finalPriceElement.innerHTML = "";
 
             if (!destination || !countrySurcharges[destination]) {
@@ -200,13 +203,33 @@
 
             let surcharge = countrySurcharges[destination];
             let totalPrice = 0;
-            let airline = { name: "אל על", basePrice: 320 };
 
-            let basePrice = airline.basePrice * surcharge;
-            let pricePerPassenger = basePrice + (basePrice * 0.9); // תיקון לחישוב המחיר לכל נוסע.
-            let totalAirlinePrice = pricePerPassenger * passengerCount * 2; // הכפלת המחיר פי 2 עבור כל נוסע נוסף.
+            // חישוב ההבדל בתאריכים
+            let currentDate = new Date();
+            let departureDateObj = new Date(departureDate);
+            let dateDiff = Math.floor((departureDateObj - currentDate) / (1000 * 3600 * 24)); // ימים בין התאריכים
 
-            totalPrice = totalAirlinePrice; // מחיר לאל על בלבד.
+            // חישוב התוספת למחיר לפי המרחק בזמן
+            let timeFactor = 1;
+            if (dateDiff < 7) {
+                timeFactor = 1.2;  // אם הטיסה קרובה מאוד, המחיר יעלה ב-20%
+            } else if (dateDiff > 30) {
+                timeFactor = 0.9;  // אם הטיסה רחוקה, המחיר יפחת ב-10%
+            }
+
+            // חישוב מחיר הטיסה עם התוספת של הזמן
+            let airlines = [
+                { name: "אל על", basePrice: 320 }
+            ];
+
+            airlines.forEach(airline => {
+                let basePrice = airline.basePrice * surcharge * timeFactor;
+                let price = basePrice + (basePrice * (passengerCount - 1) * 0.9);
+                let li = document.createElement("li");
+                li.innerText = `${airline.name}: ${price.toFixed(2)} ₪`;
+                list.appendChild(li);
+                totalPrice += price;
+            });
 
             finalPriceElement.innerText = `המחיר הכולל: ${totalPrice.toFixed(2)} ₪`;
         }
@@ -218,7 +241,6 @@
             let hotelType = document.getElementById("hotelType").value;
             let hotelList = document.getElementById("hotelPrices");
             let hotelFinalPriceElement = document.getElementById("hotelFinalPrice");
-
             hotelList.innerHTML = "";
             hotelFinalPriceElement.innerHTML = "";
 
@@ -228,12 +250,9 @@
             }
 
             let price = hotelPrices[hotelType];
-            let li = document.createElement("li");
-            li.innerText = `מחיר חדר ${hotelType}: ${price} ₪`;
-            hotelList.appendChild(li);
-            hotelFinalPriceElement.innerText = `מחיר הסופי: ${price} ₪`;
+            hotelList.innerHTML = `<li>מחיר חדר: ${price} ₪</li>`;
+            hotelFinalPriceElement.innerText = `מחיר כולל לחדר: ${price} ₪`;
         }
     </script>
-
 </body>
 </html>
