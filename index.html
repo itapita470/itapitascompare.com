@@ -200,18 +200,13 @@
 
             let surcharge = countrySurcharges[destination];
             let totalPrice = 0;
-            let airlines = [
-                { name: "אל על", basePrice: 320 },
-                { name: "ריינאייר", basePrice: 270 }
-            ];
+            let airline = { name: "אל על", basePrice: 320 };
 
-            airlines.forEach(airline => {
-                let basePrice = airline.basePrice * surcharge;
-                let pricePerPassenger = basePrice + (basePrice * 0.9); // תיקון לחישוב המחיר לכל נוסע.
-                let totalAirlinePrice = pricePerPassenger * passengerCount * 2; // הכפלת המחיר פי 2 עבור כל נוסע נוסף.
-                
-                totalPrice += totalAirlinePrice; // חישוב המחיר הכולל לכל חברות התעופה.
-            });
+            let basePrice = airline.basePrice * surcharge;
+            let pricePerPassenger = basePrice + (basePrice * 0.9); // תיקון לחישוב המחיר לכל נוסע.
+            let totalAirlinePrice = pricePerPassenger * passengerCount * 2; // הכפלת המחיר פי 2 עבור כל נוסע נוסף.
+
+            totalPrice = totalAirlinePrice; // מחיר לאל על בלבד.
 
             finalPriceElement.innerText = `המחיר הכולל: ${totalPrice.toFixed(2)} ₪`;
         }
