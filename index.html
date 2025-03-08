@@ -210,12 +210,13 @@
 
             airlines.forEach(airline => {
                 let basePrice = airline.basePrice * surcharge;
-                let pricePerPassenger = basePrice; // כל נוסע משלם את המחיר הבסיסי
-                let totalFlightPrice = pricePerPassenger * passengerCount; // המחיר הכולל
+                let pricePerPassenger = basePrice + (basePrice * 0.9); // תיקון לחישוב המחיר לכל נוסע.
+                let totalAirlinePrice = pricePerPassenger * passengerCount * 2; // הכפלת המחיר פי 2 עבור כל נוסע נוסף.
+                
                 let li = document.createElement("li");
-                li.innerText = `${airline.name}: ${totalFlightPrice.toFixed(2)} ₪`;
+                li.innerText = `${airline.name}: ${pricePerPassenger.toFixed(2)} ₪ לנוסע, סה"כ: ${totalAirlinePrice.toFixed(2)} ₪`;
                 list.appendChild(li);
-                totalPrice += totalFlightPrice;
+                totalPrice += totalAirlinePrice; // חישוב המחיר הכולל לכל חברות התעופה.
             });
 
             finalPriceElement.innerText = `המחיר הכולל: ${totalPrice.toFixed(2)} ₪`;
