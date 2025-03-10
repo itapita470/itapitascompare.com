@@ -40,20 +40,6 @@
         button:hover {
             background-color: #ff4500;
         }
-        footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #888;
-        }
-        #scrollButton {
-            margin-top: 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
         h2 {
             color: #ff5733;
         }
@@ -86,119 +72,59 @@
     <div class="container">
         <h2>חיפוש לינה</h2>
         <input type="text" id="hotelDestination" placeholder="בחר יעד לחופשה">
-        <select id="hotelSelect">
-            <option value="telaviv">תל אביב</option>
-            <option value="jerusalem">ירושלים</option>
-            <option value="eilat">אילת</option>
-            <option value="haifa">חיפה</option>
-            <option value="netanya">נתניה</option>
-        </select>
         <button onclick="findHotel()">חפש לינה</button>
         <ul id="hotelPrices"></ul>
-        <p id="hotelFinalPrice"></p>
     </div>
 
-    <button id="scrollButton" onclick="scrollToBottom()">לרדת למטה</button>
-
     <script>
-        // פונקציה להמרת מטבע לשקל
-        const rates = { usd: 3.56, eur: 3.73 };
+        async function fetchExchangeRates() {
+            try {
+                let response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+                let data = await response.json();
+                return { usd: data.rates.ILS, eur: data.rates.ILS / data.rates.EUR };
+            } catch (error) {
+                alert("שגיאה בעדכון שערי המטבע. משתמשים בשערים קבועים.");
+                return { usd: 3.56, eur: 3.73 };
+            }
+        }
 
-        function convertCurrency() {
+        async function convertCurrency() {
             let amount = document.getElementById("amount").value;
             let currency = document.getElementById("currency").value;
             if (!amount || isNaN(amount)) {
                 alert("נא להזין סכום תקין");
                 return;
             }
+            let rates = await fetchExchangeRates();
             let converted = (amount * rates[currency]).toFixed(2);
             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
         }
 
-        // חישוב מחירי טיסות
-        const countrySurcharges = {
-            "ישראל": 1.0, "בריטניה": 1.15, "הולנד": 1.10, "גרמניה": 1.08, "צרפת": 1.05, "ספרד": 1.20,
-            "דובאי": 1.30, "ארה\"ב": 1.40, "איטליה": 1.16, "יוון": 1.18, "קנדה": 1.30, "תאילנד": 1.25,
-            "אוסטרליה": 1.30, "יפן": 1.35, "סין": 1.38, "אוקראינה": 1.18, "ברזיל": 1.32, "רוסיה": 1.35
-        };
-
         function calculateFlights() {
-            let destination = document.getElementById("destination").value;
-            let departureDate = document.getElementById("departureDate").value;
-            let days = document.getElementById("days").value;
+            let basePrice = 3700;
             let passengerCount = document.getElementById("passengerCount").value || 1;
-            let list = document.getElementById("flightPrices");
-            let finalPriceElement = document.getElementById("finalPrice");
-            list.innerHTML = "";
-            finalPriceElement.innerHTML = "";
-
-            if (!destination || !countrySurcharges[destination]) {
-                alert("נא לבחור יעד תקני");
-                return;
-            }
-            if (!days || isNaN(days) || days <= 0) {
-                alert("נא להזין מספר ימים תקין");
-                return;
-            }
-
-            let surcharge = countrySurcharges[destination];
-            let totalPrice = 0;
-
-            // חישוב ההבדל בתאריכים
-            let currentDate = new Date();
-            let departureDateObj = new Date(departureDate);
-            let dateDiff = Math.floor((departureDateObj - currentDate) / (1000 * 3600 * 24)); // ימים בין התאריכים
-
-            // חישוב התוספת למחיר לפי המרחק בזמן
-            let timeFactor = 1;
-            if (dateDiff < 7) {
-                timeFactor = 1.2;  // אם הטיסה קרובה מאוד, המחיר יעלה ב-20%
-            } else if (dateDiff > 30) {
-                timeFactor = 0.9;  // אם הטיסה רחוקה, המחיר יפחת ב-10%
-            }
-
-            // חישוב מחיר הטיסה עם התוספת של הזמן
-            let airlines = [
-                { name: "אל על", basePrice: 3700 } // מחיר בסיסי
-            ];
-
-            airlines.forEach(airline => {
-                let basePrice = airline.basePrice * surcharge * timeFactor;
-                let price = basePrice + (basePrice * (passengerCount - 1) * 0.9);
-                let li = document.createElement("li");
-                li.innerText = `${airline.name}: ${price.toFixed(2)} ₪`;
-                list.appendChild(li);
-                totalPrice += price;
-            });
-
-            finalPriceElement.innerText = `המחיר הכולל: ${totalPrice.toFixed(2)} ₪`;
+            let price = basePrice * passengerCount;
+            document.getElementById("finalPrice").innerText = `מחיר כולל: ${price.toFixed(2)} ₪`;
         }
-
-        // חיפוש לינה
-        const hotelPrices = {
-            "telaviv": 300, "jerusalem": 250, "eilat": 350, "haifa": 200, "netanya": 270
-        };
 
         function findHotel() {
-            let hotelDestination = document.getElementById("hotelDestination").value;
-            let hotelSelect = document.getElementById("hotelSelect").value;
-            let hotelList = document.getElementById("hotelPrices");
-            let hotelFinalPriceElement = document.getElementById("hotelFinalPrice");
-            hotelList.innerHTML = "";
-            hotelFinalPriceElement.innerHTML = "";
-
-            if (!hotelDestination) {
-                alert("נא להזין יעד לחופשה");
-                return;
-            }
-
-            let price = hotelPrices[hotelSelect];
-            hotelList.innerHTML = `<li>מחיר ללילה: ${price} ₪</li>`;
-            hotelFinalPriceElement.innerText = `מחיר כולל ללינה: ${price} ₪`;
-        }
-
-        function scrollToBottom() {
-            window.scrollTo(0, document.body.scrollHeight);
+            let hotels = [
+                { name: "מלון הילטון", price: 500 },
+                { name: "מלון ישרוטל", price: 450 },
+                { name: "מלון קינג דיוויד", price: 600 },
+                { name: "מלון דן תל אביב", price: 550 },
+                { name: "מלון רויאל פלאזה", price: 400 },
+                { name: "מלון לאונרדו", price: 420 },
+                { name: "מלון נפטון אילת", price: 480 },
+                { name: "מלון המלך שלמה", price: 470 }
+            ];
+            let list = document.getElementById("hotelPrices");
+            list.innerHTML = "";
+            hotels.forEach(hotel => {
+                let li = document.createElement("li");
+                li.innerText = `${hotel.name}: ${hotel.price} ₪ ללילה`;
+                list.appendChild(li);
+            });
         }
     </script>
 </body>
