@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ממיר מטבע, מחירי טיסות מאת איתי בן דוד! ולינה</title>
+    <title>ממיר מטבע, מחירי טיסות ולינה - by itapita</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,8 +48,7 @@
 <body>
 
     <div class="container">
-        <h2>המרת מטבע
- by itapita orginal</h2>
+        <h2>המרת מטבע by itapita</h2>
         <input type="number" id="amount" placeholder="הזן סכום">
         <select id="currency">
             <option value="usd">דולר ($)</option>
@@ -60,25 +59,23 @@
     </div>
 
     <div class="container">
-        <h2>חיפוש טיסות
-by itapita orginal</h2>
+        <h2>חיפוש טיסות by itapita</h2>
         <input type="text" id="destination" placeholder="בחר יעד">
         <input type="date" id="departureDate" placeholder="בחר תאריך טיסה">
         <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
         <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1">
         <button onclick="calculateFlights()">חשב מחירי טיסות</button>
-        <ul id="flightPrices"></ul>
         <p id="finalPrice"></p>
     </div>
 
     <div class="container">
         <h2>חיפוש לינה</h2>
         <input type="text" id="hotelDestination" placeholder="בחר יעד לחופשה">
-        <button onclick="findHotel()">חפש לינה
-by itapita orginal 
-</button>
+        <button onclick="findHotel()">חפש לינה</button>
         <ul id="hotelPrices"></ul>
     </div>
+
+    <p>© 2025 by itapita. כל הזכויות שמורות.</p>
 
     <script>
         async function fetchExchangeRates() {
@@ -129,28 +126,8 @@ by itapita orginal
                 li.innerText = `${hotel.name}: ${hotel.price} ₪ ללילה`;
                 list.appendChild(li);
             });
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-<h2>by itapita ©️</h2>
-
         }
     </script>
+
 </body>
 </html>
