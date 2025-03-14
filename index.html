@@ -51,7 +51,7 @@
     <h1>השוואת מחירים - טיסות, מלונות והמרות מטבע</h1>
     <div class="container">
         <h2>המרת מטבע</h2>
-        <input type="number" id="amount" placeholder="הזן סכום">
+        <input type="number" id="amount" placeholder="הזן סכום" />
         <select id="currency">
             <option value="usd">דולר ($)</option>
             <option value="eur">יורו (€)</option>
@@ -62,15 +62,15 @@
 
     <div class="container">
         <h2>חיפוש טיסות</h2>
-        <input type="text" id="destination" placeholder="בחר יעד">
-        <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1">
+        <input type="text" id="destination" placeholder="בחר יעד" />
+        <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1" />
         <button onclick="calculateFlights()">חשב מחירי טיסות</button>
         <p id="finalPrice"></p>
     </div>
 
     <div class="container">
         <h2>חיפוש לינה</h2>
-        <input type="text" id="hotelDestination" placeholder="בחר יעד לחופשה">
+        <input type="text" id="hotelDestination" placeholder="בחר יעד לחופשה" />
         <button onclick="findHotel()">חפש לינה</button>
         <ul id="hotelPrices"></ul>
     </div>
@@ -84,8 +84,8 @@
                 let data = await response.json();
                 return { usd: data.rates.ILS, eur: data.rates.ILS / data.rates.EUR };
             } catch (error) {
-                alert("שגיאה בעדכון שערי המטבע. משתמשים בשערים קבועים.");
-                return { usd: 3.56, eur: 3.73 };
+                console.error("שגיאה בעדכון שערי המטבע. משתמשים בשערים קבועים.");
+                return { usd: 3.56, eur: 3.73 }; // שערים קבועים במקרה של שגיאה
             }
         }
 
