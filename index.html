@@ -1,133 +1,109 @@
-<!DOCTYPE html>
-<html lang="he">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>השוואת מחירים - טיסות, מלונות והמרות מטבע</title>
-    
-    <!-- SEO & Meta Tags -->
-    <meta name="description" content="ממיר מטבע, מחירי טיסות ולינה - האתר הרשמי של Itapita להשוואת מחירים.">
-    <meta name="keywords" content="השוואת מחירים, המרת מטבע, טיסות זולות, מלונות">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Itapita - השוואת מחירים">
-    <meta property="og:description" content="מצא את המחירים הכי טובים לטיסות, מלונות והמרות מטבע באתר של Itapita.">
-    <meta property="og:url" content="https://itapita470.github.io/itapitascompare.com/">
-    <meta property="og:type" content="website">
-    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: #ffecb3;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 400px;
-            margin: auto;
-            border: 3px solid #ff5733;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            background-color: #ff5733;
-            color: white;
-            cursor: pointer;
-        }
-        h1, h2 {
-            color: #ff5733;
-        }
-    </style>
-</head>
-<body>
-
-    <h1>השוואת מחירים - טיסות, מלונות והמרות מטבע</h1>
-    <div class="container">
-        <h2>המרת מטבע</h2>
-        <input type="number" id="amount" placeholder="הזן סכום">
-        <select id="currency">
-            <option value="usd">דולר ($)</option>
-            <option value="eur">יורו (€)</option>
-        </select>
-        <button onclick="convertCurrency()">המר</button>
-        <p id="result"></p>
-    </div>
-
-    <div class="container">
-        <h2>חיפוש טיסות</h2>
-        <input type="text" id="destination" placeholder="בחר יעד">
-        <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1">
-        <button onclick="calculateFlights()">חשב מחירי טיסות</button>
-        <p id="finalPrice"></p>
-    </div>
-
-    <div class="container">
-        <h2>חיפוש לינה</h2>
-        <input type="text" id="hotelDestination" placeholder="בחר יעד לחופשה">
-        <button onclick="findHotel()">חפש לינה</button>
-        <ul id="hotelPrices"></ul>
-    </div>
-
-    <p>© 2025 by itapita. כל הזכויות שמורות.</p>
-
-    <script>
-        async function fetchExchangeRates() {
-            try {
-                let response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
-                let data = await response.json();
-                return { usd: data.rates.ILS, eur: data.rates.ILS / data.rates.EUR };
-            } catch (error) {
-                alert("שגיאה בעדכון שערי המטבע. משתמשים בשערים קבועים.");
-                return { usd: 3.56, eur: 3.73 };
-            }
-        }
-
-        async function convertCurrency() {
-            let amount = document.getElementById("amount").value;
-            let currency = document.getElementById("currency").value;
-            if (!amount || isNaN(amount)) {
-                alert("נא להזין סכום תקין");
-                return;
-            }
-            let rates = await fetchExchangeRates();
-            let converted = (amount * rates[currency]).toFixed(2);
-            document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
-        }
-
-        function calculateFlights() {
-            let basePrice = 3700;
-            let passengerCount = document.getElementById("passengerCount").value || 1;
-            let price = basePrice * passengerCount;
-            document.getElementById("finalPrice").innerText = `מחיר כולל: ${price.toFixed(2)} ₪`;
-        }
-
-        function findHotel() {
-            let hotels = [
-                { name: "מלון הילטון", price: 500 },
-                { name: "מלון ישרוטל", price: 450 },
-                { name: "מלון קינג דיוויד", price: 600 },
-                { name: "מלון דן תל אביב", price: 550 },
-                { name: "מלון רויאל פלאזה", price: 400 },
-                { name: "מלון לאונרדו", price: 420 },
-                { name: "מלון נפטון אילת", price: 480 },
-                { name: "מלון המלך שלמה", price: 470 }
-            ];
-            let list = document.getElementById("hotelPrices");
-            list.innerHTML = "";
-            hotels.forEach(hotel => {
-                let li = document.createElement("li");
-                li.innerText = `${hotel.name}: ${hotel.price} ₪ ללילה`;
-                list.appendChild(li);
-            });
-        }
-    </script>
-
-</body>
-</html>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>ממיר מטבע, מחירי טיסות ולינה - by itapita</title>
+     <title>השוואת מחירים - טיסות, מלונות והמרות מטבע</title>
+     
+     <!-- SEO & Meta Tags -->
+     <meta name="description" content="ממיר מטבע, מחירי טיסות ולינה - האתר הרשמי של Itapita להשוואת מחירים.">
+     <meta name="keywords" content="השוואת מחירים, המרת מטבע, טיסות זולות, מלונות">
+     <meta name="robots" content="index, follow">
+     <meta property="og:title" content="Itapita - השוואת מחירים">
+     <meta property="og:description" content="מצא את המחירים הכי טובים לטיסות, מלונות והמרות מטבע באתר של Itapita.">
+     <meta property="og:url" content="https://itapita470.github.io/itapitascompare.com/">
+     <meta property="og:type" content="website">
+     
+     <style>
+         body {
+             font-family: Arial, sans-serif;
+ @@ -40,15 +50,15 @@
+         button:hover {
+             background-color: #ff4500;
+         }
+         h2 {
+         h1, h2 {
+             color: #ff5733;
+         }
+     </style>
+ </head>
+ <body>
+ 
+     <h1>השוואת מחירים - טיסות, מלונות והמרות מטבע</h1>
+     <div class="container">
+         <h2>המרת מטבע by itapita</h2>
+         <h2>המרת מטבע - בדוק את השערים המעודכנים</h2>
+         <input type="number" id="amount" placeholder="הזן סכום">
+         <select id="currency">
+             <option value="usd">דולר ($)</option>
+ @@ -59,11 +69,8 @@ <h2>המרת מטבע by itapita</h2>
+     </div>
+ 
+     <div class="container">
+         <h2>חיפוש טיסות by itapita</h2>
+         <h2>חיפוש טיסות</h2>
+         <input type="text" id="destination" placeholder="בחר יעד">
+         <input type="date" id="departureDate" placeholder="בחר תאריך טיסה">
+         <input type="number" id="days" placeholder="מספר ימים בחו\"ל">
+         <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1">
+         <button onclick="calculateFlights()">חשב מחירי טיסות</button>
+         <p id="finalPrice"></p>
+     </div>
+ @@ -78,46 +85,29 @@ <h2>חיפוש לינה</h2>
+     <p>© 2025 by itapita. כל הזכויות שמורות.</p>
+ 
+     <script>
+         async function fetchExchangeRates() {
+             try {
+                 let response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+                 let data = await response.json();
+                 return { usd: data.rates.ILS, eur: data.rates.ILS / data.rates.EUR };
+             } catch (error) {
+                 alert("שגיאה בעדכון שערי המטבע. משתמשים בשערים קבועים.");
+                 return { usd: 3.56, eur: 3.73 };
+             }
+         }
+ 
+         async function convertCurrency() {
+             let amount = document.getElementById("amount").value;
+             let currency = document.getElementById("currency").value;
+             if (!amount || isNaN(amount)) {
+                 alert("נא להזין סכום תקין");
+                 return;
+             }
+             let rates = await fetchExchangeRates();
+             let response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+             let data = await response.json();
+             let rates = { usd: data.rates.ILS, eur: data.rates.ILS / data.rates.EUR };
+             let converted = (amount * rates[currency]).toFixed(2);
+             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
+         }
+ 
+         function calculateFlights() {
+             let basePrice = 3700;
+             let passengerCount = document.getElementById("passengerCount").value || 1;
+             let price = basePrice * passengerCount;
+             document.getElementById("finalPrice").innerText = `מחיר כולל: ${price.toFixed(2)} ₪`;
+             document.getElementById("finalPrice").innerText = `מחיר משוער: ${basePrice} ₪`;
+         }
+ 
+         function findHotel() {
+             let hotels = [
+                 { name: "מלון הילטון", price: 500 },
+                 { name: "מלון ישרוטל", price: 450 },
+                 { name: "מלון קינג דיוויד", price: 600 },
+                 { name: "מלון דן תל אביב", price: 550 },
+                 { name: "מלון רויאל פלאזה", price: 400 },
+                 { name: "מלון לאונרדו", price: 420 },
+                 { name: "מלון נפטון אילת", price: 480 },
+                 { name: "מלון המלך שלמה", price: 470 }
+                 { name: "מלון ישרוטל", price: 450 }
+             ];
+             let list = document.getElementById("hotelPrices");
+             list.innerHTML = "";
+ @@ -128,6 +118,5 @@ <h2>חיפוש לינה</h2>
+             });
+         }
+     </script>
+ 
+ </body>
+ </html>
