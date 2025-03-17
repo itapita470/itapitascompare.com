@@ -5,15 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>השוואת מחירים - טיסות, מלונות והמרות מטבע</title>
 
-    <!-- SEO & Meta Tags -->
-    <meta name="description" content="ממיר מטבע, מחירי טיסות ולינה - האתר הרשמי של Itapita להשוואת מחירים.">
-    <meta name="keywords" content="השוואת מחירים, המרת מטבע, טיסות זולות, מלונות">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Itapita - השוואת מחירים">
-    <meta property="og:description" content="מצא את המחירים הכי טובים לטיסות, מלונות והמרות מטבע באתר של Itapita.">
-    <meta property="og:url" content="https://itapita470.github.io/itapitascompare.com/">
-    <meta property="og:type" content="website">
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -79,10 +70,11 @@
 
     <script>
         async function fetchExchangeRates() {
+            let apiKey = '75bf0f0b53c295e7ac893335';  // ה-API Key שלך
             try {
-                let response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+                let response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
                 let data = await response.json();
-                return { usd: data.rates.ILS, eur: data.rates.ILS / data.rates.EUR };
+                return { usd: data.conversion_rates.ILS, eur: data.conversion_rates.ILS / data.conversion_rates.EUR };
             } catch (error) {
                 console.error("שגיאה בעדכון שערי המטבע. משתמשים בשערים קבועים.");
                 return { usd: 3.56, eur: 3.73 }; // שערים קבועים במקרה של שגיאה
