@@ -107,19 +107,22 @@
 
             try {
                 const response = await fetch(url, options);
+                
                 if (response.status === 429) {
                     alert("הגעת למגבלת הבקשות. יש לנסות מאוחר יותר.");
                     return;
                 }
+
                 const data = await response.json();
 
-                if (data.best_matches && data.best_matches.length > 0) {
-                    let basePrice = data.best_matches[0].price.total;
-                    let totalPrice = basePrice * passengerCount;
-                    document.getElementById("finalPrice").innerText = `מחיר כולל: ${totalPrice.toFixed(2)} ₪`;
-                } else {
-                    document.getElementById("finalPrice").innerText = "לא נמצאו תוצאות.";
+                if (!data.best_matches || data.best_matches.length === 0) {
+                    document.getElementById("finalPrice").innerText = "לא נמצאו תוצאות. נסה יעד או תאריך אחר.";
+                    return;
                 }
+
+                let basePrice = data.best_matches[0].price.total;
+                let totalPrice = basePrice * passengerCount;
+                document.getElementById("finalPrice").innerText = `מחיר כולל: ${totalPrice.toFixed(2)} ₪`;
             } catch (error) {
                 console.error('שגיאה בטעינת מחירים:', error);
                 alert("שגיאה בטעינת מחירי טיסות. נסה שוב.");
@@ -146,27 +149,18 @@
 
             try {
                 const response = await fetch(url, options);
-                if (response.status === 429) {
-                    alert("הגעת למגבלת הבקשות. יש לנסות מאוחר יותר.");
-                    return;
-                }
                 const data = await response.json();
-                let hotels = data.suggestions[0]?.entities;
+                let hotels = data.suggestions[0].entities;
                 let list = document.getElementById("hotelPrices");
                 list.innerHTML = "";
 
-                if (hotels && hotels.length > 0) {
-                    hotels.forEach(hotel => {
-                        let li = document.createElement("li");
-                        li.innerText = `${hotel.name}: ${hotel.price ? hotel.price.amount : "מחיר לא זמין"}`;
-                        list.appendChild(li);
-                    });
-                } else {
-                    list.innerHTML = "לא נמצאו תוצאות.";
-                }
+                hotels.forEach(hotel => {
+                    let li = document.createElement("li");
+                    li.innerText = `${hotel.name}: ${hotel.price ? hotel.price.amount : "מחיר לא זמין"}`;
+                    list.appendChild(li);
+                });
             } catch (error) {
                 console.error('שגיאה בחיפוש מלונות:', error);
-                alert("שגיאה בחיפוש מלונות. נסה שוב.");
             }
         }
 
