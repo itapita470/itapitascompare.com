@@ -93,31 +93,72 @@
             document.getElementById("result").innerText = `תוצאה: ${converted} ₪`;
         }
 
-        function calculateFlights() {
-            let basePrice = 3700;
-            let passengerCount = document.getElementById("passengerCount").value || 1;
-            let price = basePrice * passengerCount;
-            document.getElementById("finalPrice").innerText = `מחיר כולל: ${price.toFixed(2)} ₪`;
+        // חישוב טיסות בעזרת RapidAPI
+        async function fetchFlightPrices(destination, passengerCount) {
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': 'fca025d51cmshdbc59e1943bc0acp151324jsnd00e181ae6b6',
+                    'X-RapidAPI-Host': 'skyscanner44.p.rapidapi.com'
+                }
+            };
+
+            const url = `https://skyscanner44.p.rapidapi.com/flight/search?fly_from=TLV&fly_to=${destination}&date=2025-04-01`;
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                let basePrice = data.best_matches[0].price.total;
+                let totalPrice = basePrice * passengerCount;
+                document.getElementById("finalPrice").innerText = `מחיר כולל: ${totalPrice.toFixed(2)} ₪`;
+            } catch (error) {
+                console.error('שגיאה בטעינת מחירים:', error);
+            }
         }
 
-        function findHotel() {
-            let hotels = [
-                { name: "מלון הילטון", price: 500 },
-                { name: "מלון ישרוטל", price: 450 },
-                { name: "מלון קינג דיוויד", price: 600 },
-                { name: "מלון דן תל אביב", price: 550 },
-                { name: "מלון רויאל פלאזה", price: 400 },
-                { name: "מלון לאונרדו", price: 420 },
-                { name: "מלון נפטון אילת", price: 480 },
-                { name: "מלון המלך שלמה", price: 470 }
-            ];
-            let list = document.getElementById("hotelPrices");
-            list.innerHTML = "";
-            hotels.forEach(hotel => {
-                let li = document.createElement("li");
-                li.innerText = `${hotel.name}: ${hotel.price} ₪ ללילה`;
-                list.appendChild(li);
-            });
+        // חיפוש מלונות בעזרת RapidAPI
+        async function findHotel() {
+            let destination = document.getElementById("hotelDestination").value;
+            if (!destination) {
+                alert("נא להזין יעד לחופשה");
+                return;
+            }
+
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': 'fca025d51cmshdbc59e1943bc0acp151324jsnd00e181ae6b6',
+                    'X-RapidAPI-Host': 'hotels4.p.rapidapi.com'
+                }
+            };
+
+            const url = `https://hotels4.p.rapidapi.com/locations/v2/search?query=${destination}&locale=he_IL`;
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                let hotels = data.suggestions[0].entities;
+                let list = document.getElementById("hotelPrices");
+                list.innerHTML = "";
+
+                hotels.forEach(hotel => {
+                    let li = document.createElement("li");
+                    li.innerText = `${hotel.name}: ${hotel.price ? hotel.price.amount : "מחיר לא זמין"}`;
+                    list.appendChild(li);
+                });
+            } catch (error) {
+                console.error('שגיאה בחיפוש מלונות:', error);
+            }
+        }
+
+        function calculateFlights() {
+            let destination = document.getElementById("destination").value;
+            let passengerCount = document.getElementById("passengerCount").value || 1;
+            if (destination) {
+                fetchFlightPrices(destination, passengerCount);
+            } else {
+                alert("נא להזין יעד");
+            }
         }
     </script>
 
