@@ -40,6 +40,7 @@
 <body>
 
     <h1>השוואת מחירים - טיסות, מלונות והמרות מטבע</h1>
+
     <div class="container">
         <h2>המרת מטבע</h2>
         <input type="number" id="amount" placeholder="הזן סכום" />
@@ -103,21 +104,23 @@
                 }
             };
 
+            // דוגמה לכתובת שהייתה אמורה לעבוד עם ערך יעד מוגדר
             const url = `https://skyscanner44.p.rapidapi.com/flight/search?fly_from=TLV&fly_to=${destination}&date=2025-04-01`;
 
             try {
                 const response = await fetch(url, options);
                 const data = await response.json();
-                if (data.best_matches && data.best_matches.length > 0) {
+
+                if (data.best_matches && data.best_matches[0]) {
                     let basePrice = data.best_matches[0].price.total;
                     let totalPrice = basePrice * passengerCount;
                     document.getElementById("finalPrice").innerText = `מחיר כולל: ${totalPrice.toFixed(2)} ₪`;
                 } else {
-                    document.getElementById("finalPrice").innerText = "לא נמצאו תוצאות.";
+                    document.getElementById("finalPrice").innerText = "לא נמצאו תוצאות";
                 }
             } catch (error) {
+                document.getElementById("finalPrice").innerText = "שגיאה בטעינת מחירים";
                 console.error('שגיאה בטעינת מחירים:', error);
-                document.getElementById("finalPrice").innerText = "שגיאה בטעינת מחירים.";
             }
         }
 
@@ -142,7 +145,7 @@
             try {
                 const response = await fetch(url, options);
                 const data = await response.json();
-                if (data.suggestions && data.suggestions[0].entities.length > 0) {
+                if (data.suggestions && data.suggestions[0]) {
                     let hotels = data.suggestions[0].entities;
                     let list = document.getElementById("hotelPrices");
                     list.innerHTML = "";
@@ -153,11 +156,11 @@
                         list.appendChild(li);
                     });
                 } else {
-                    document.getElementById("hotelPrices").innerHTML = "לא נמצאו תוצאות.";
+                    document.getElementById("hotelPrices").innerText = "לא נמצאו תוצאות";
                 }
             } catch (error) {
+                document.getElementById("hotelPrices").innerText = "שגיאה בחיפוש מלונות";
                 console.error('שגיאה בחיפוש מלונות:', error);
-                document.getElementById("hotelPrices").innerHTML = "שגיאה בחיפוש מלונות.";
             }
         }
 
