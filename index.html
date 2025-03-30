@@ -2,7 +2,7 @@
 <html lang="he">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1024"> 
     <title>השוואת מחירים - טיסות, מלונות והמרות מטבע</title>
     <p>מומלץ לפתיחה במחשב או מצב desktop</p>
 
@@ -12,12 +12,14 @@
             text-align: center;
             padding: 20px;
             background-color: #ffecb3;
+            min-width: 1024px; /* מציב רוחב מינימלי למחשב */
+            overflow-x: auto;
         }
         .container {
             background: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 10px;
-            max-width: 400px;
+            max-width: 800px; /* רוחב קבוע */
             margin: auto;
             border: 3px solid #ff5733;
         }
@@ -37,18 +39,48 @@
             color: #ff5733;
         }
 
+        /* הגדרת תמונות */
+        .logo-container {
+            position: absolute;
+            top: 10%;
+            left: 10px;
+            width: 60px;
+            z-index: 10;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: auto;
+        }
+
         .image-container {
             position: absolute;
             top: 30%;
-            right: 0;
-            width: 200px; 
+            right: 0; /* העברתי את זה לימין */
+            width: 200px;
             height: auto;
-            z-index: 10;
+            z-index: 5;
         }
 
         .image-container img {
             width: 60%;
             height: auto;
+        }
+
+        /* תיקונים נוספים עבור רזולוציה גבוהה */
+        @media only screen and (min-width: 1024px) {
+            .container {
+                max-width: 900px;
+                padding: 40px;
+            }
+            .logo-container {
+                width: 80px;
+                top: 5%;
+            }
+            .image-container {
+                width: 250px;
+                top: 25%;
+            }
         }
     </style>
 </head>
@@ -56,10 +88,17 @@
 
     <h1>השוואת מחירים - טיסות, מלונות והמרות מטבע</h1>
 
+    <!-- לוגו בצד שמאל -->
+    <div class="logo-container">
+        <a href="https://www.example.com" target="_blank">
+            <img src="https://i.imghippo.com/files/NE7223qrs.png" alt="Logo">
+        </a>
+    </div>
+
+    <!-- מגלשות בצד ימין -->
     <div class="image-container">
         <a href="https://sites.google.com/view/the-top-10-slides/home?authuser=2" target="_blank">
             <img src="https://lh3.googleusercontent.com/fife/ALs6j_HnCrLJSXI9qiQXfmNyzmdKMyGWcjRnjF4iMPAjyIqZJXtmHofrlReAR8CwuJEQ4_FWyHKSbYiOd1f2BXNY1zzu7yf0TAVDaKbslDUSgToMqK2N8rZHQbU4jimQ37oXHhli2o3TM_CPCKoSBMJ6nIEBxbH5AtfL__o0tnbnSb2djcuhqx8PnRqUsBLIANp-aOZJnaOI23JTxt1VQc6l7EtESxA8UQyzMENDzr558ewOt1rITkO-cd1FBSqGkdDs69Sanyjo0nUye5H9gWVCyBHFbkqceaECWuYSc3Pnl2PD2Bc0hwRoixqVoc_RR7U3tWuZIRRrCMOdeBwIvW1mL-Fg_ZX2SkTutyrwhv6oOtT9_erM4PN38bmFT6SCtPVw3E1NeveydfYVmuuTMFVh-0I23sC6TdSvtW0Qk5VUvnTefxL9sHdNY7Qo6Re5xMV-EIxZkCv2gBrKfXkqHtqGBcVeZdUxwDw5nkXsIWnYM6MOohBuqRgnBh5fJTtWrOFOMC3yLuwEOwQp5SNKidRHkDC77wkH-M69VQAv11vYWH_MB9N6V3dVApBqTRUdf8WO0GD-nKmaODF0y7p2JYIUjmiXE4V6pwK5z5me5OTj-SDg21G5L7U6xSVA-8_2gNV03JMsOKfqhVpGY3V7xpE25J31WDLp9Km9VSOzOAA_vOS5Vnhhqhfzu9RPAZjPJj8RSvd0mNr87-5INod6q5JerjU_VV7tAhm_RUpb4COJ_ez5yx5Ja6TTjNkZPYYj3Nc-lop1t2SlAAhy3g0D-IUVzRNoq1L-J-BkXoGejr_a1vOhDu6eCNyLVdNPJwtoQRGNWQvUkyeuyiRp0A6hxo1S4EAbyajnvaEYHCl_jDV4zrA6TyQ_tdmgM2q9yity0AqkzFTBtIayMv6R0y0Ug5TuyujJwVYvf-kN87xPG7VGIBrHDchLsXfYzyzl_j096Vj4wsLZy03Hl2w0CDoF5WpVt6lsDEVGZrnarxfCinzwkLNj_LkUfJrQHaSJ08blxmkWEsHTEAosrstpo8_JfadfRvafSKreCuW4tIjDFZXuOZhWlld9vnu6JlLGIlO95uZL96G-4tnvfsgXjs0PjT8bL1A-SvoLyWdOmg8XLhDi8OGX4S5XeoQr8X5wbfEZHEGld-G136pZvC0V1VYeYEq5lRptDGONwK9m_JXqbROZIAM5gfeLZiWkUwFMQyIGT8XW2DvojFXRHbilmv8d-fmlETrBfHBzRYtSHQqVUJ34pU5WQTsSqezdbksjOpitXpry8jmJNuJuYgnAxhsKgqkXKeG-sj1yMGArRRSh2f28ZavIoI3h94koJFJZ4YT2IDVMc9k1G9TfX49hy4-OzeqCd3lJqqc9pwU7v9V4_T_d37p0aCz0tIzZQlGduR8zaK9OcpaNDxqqZ5CASEiGyCMJMJtmQki8v-ZOjQCKdfUtm6GmUHsvmiJy0LMLPV3yYhATu_7ICwSpKJgxH9tuFya7rdtenGkj9Fje5k0IrC4bJyYgeLQEWV7miIUcSJWbqZ34uepnbUcZYPtrvokmlahYCQw9yA7EcXV-02wLnmDKhpF2ibHaiTpDBK8eUhaFChswwMocX7LlRbmLux1TgAAbayQcj7HVWLtCnwM2aMZxsNmZkNCNtVcnSSIjTG-REz_Aqq-y3SYCOux2IE0eeLcNkMRn" alt="תמונה בצד">
-            <h1 style="font-size: 15px;">לחץ על התמונה כדי לקרוא על- 10 המגלשות הכי גבוהות בעולם</h1>
         </a>
     </div>
 
@@ -152,29 +191,13 @@
             const hotelPrices = [
                 { name: 'מלון 1', price: 500 },
                 { name: 'מלון 2', price: 750 },
-                { name: 'מלון 3', price: 1000 }
+                { name: 'מלון 3', price: 1200 }
             ];
 
-            const list = document.getElementById('hotelPrices');
-            list.innerHTML = '';
-            hotelPrices.forEach(hotel => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${hotel.name} - ₪${hotel.price}`;
-                list.appendChild(listItem);
-            });<img src="https://i.imghippo.com/files/NE7223qrs.png" alt="Logo" style="position: absolute; top: 10px; left: 10px; width: 60px; height: auto;">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024"> 
-    <style>
-        body {
-            min-width: 1024px;
-            overflow-x: auto;
-        }
-    </style>
-</head>
-
-
+            let listHTML = hotelPrices.map(hotel => `<li>${hotel.name} - ₪${hotel.price}</li>`).join('');
+            document.getElementById('hotelPrices').innerHTML = listHTML;
         }
     </script>
+
 </body>
 </html>
