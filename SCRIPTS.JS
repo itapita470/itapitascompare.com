@@ -76,3 +76,21 @@ function openModal() {
 function closeModal() {
     document.getElementById("barcodeModal").style.display = "none";
 }
+// פונקציה לפתיחת המודאל
+function openModal() {
+    document.getElementById("barcodeModal").style.display = "block";
+    document.getElementById("barcodeImg").src = document.getElementById("barcode").src;
+}
+
+// פונקציה לסגירת המודאל
+function closeModal() {
+    document.getElementById("barcodeModal").style.display = "none";
+}
+
+// סגירה בלחיצה מחוץ לתמונה
+window.onclick = function(event) {
+    let modal = document.getElementById("barcodeModal");
+    if (event.target === modal) {
+        closeModal();
+    }
+}
