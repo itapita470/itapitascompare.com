@@ -68,3 +68,11 @@ function findHotel() {
         list.appendChild(listItem);
     });
 }
+function openModal() {
+    document.getElementById("barcodeModal").style.display = "block";
+    document.getElementById("barcodeImg").src = document.getElementById("barcode").src;
+}
+
+function closeModal() {
+    document.getElementById("barcodeModal").style.display = "none";
+}
