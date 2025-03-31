@@ -1,96 +1,60 @@
-async function fetchExchangeRates() {
-    let apiKey = '75bf0f0b53c295e7ac893335';  // ה-API Key שלך
-    try {
-        let response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
-        let data = await response.json();
-        return { usd: data.conversion_rates.ILS, eur: data.conversion_rates.ILS / data.conversion_rates.EUR };
-    } catch (error) {
-        console.error("שגיאה בעדכון שערי המטבע. משתמשים בשערים קבועים.");
-        return { usd: 3.56, eur: 3.73 }; // שערים קבועים במקרה של שגיאה
-    }
-}
+function convertCurrency() {
+    var amount = document.getElementById('amount').value;
+    var currency = document.getElementById('currency').value;
+    var result = document.getElementById('result');
 
-async function convertCurrency() {
-    const amount = document.getElementById('amount').value;
-    const currency = document.getElementById('currency').value;
-
-    if (amount === "") {
-        alert("נא להזין סכום להמרה.");
+    if (!amount || amount <= 0) {
+        result.innerHTML = "הזן סכום תקין.";
         return;
     }
 
-    const rates = await fetchExchangeRates();
-    let result = 0;
+    var exchangeRate = 0;
 
     if (currency === 'usd') {
-        result = amount * rates.usd;
-        document.getElementById('result').innerText = `${amount} דולר שווה ${result} ש"ח`;
+        exchangeRate = 3.5; // Example conversion rate for USD to ILS
     } else if (currency === 'eur') {
-        result = amount * rates.eur;
-        document.getElementById('result').innerText = `${amount} יורו שווה ${result} ש"ח`;
+        exchangeRate = 4.0; // Example conversion rate for EUR to ILS
     }
+
+    var convertedAmount = amount * exchangeRate;
+    result.innerHTML = `הסכום בהמרה: ${convertedAmount.toFixed(2)} ש"ח`;
 }
 
 function calculateFlights() {
-    const destination = document.getElementById('destination').value;
-    const passengerCount = document.getElementById('passengerCount').value;
+    var destination = document.getElementById('destination').value;
+    var passengerCount = document.getElementById('passengerCount').value;
+    var finalPrice = document.getElementById('finalPrice');
 
-    if (!destination || !passengerCount) {
-        alert("נא להזין יעד ומספר נוסעים.");
+    if (!destination || !passengerCount || passengerCount <= 0) {
+        finalPrice.innerHTML = "הזן יעד וכמות נוסעים.";
         return;
     }
 
-    const basePrice = 1000; // מחיר בסיסי
-    const totalPrice = basePrice * passengerCount;
+    var flightCost = 200; // Example cost per passenger
+    var totalPrice = flightCost * passengerCount;
 
-    document.getElementById('finalPrice').innerText = `מחיר טיסות ל-${destination} עבור ${passengerCount} נוסעים: ₪${totalPrice}`;
+    finalPrice.innerHTML = `המחיר הכולל לטיסות: ${totalPrice.toFixed(2)} ש"ח`;
 }
 
 function findHotel() {
-    const hotelDestination = document.getElementById('hotelDestination').value;
+    var hotelDestination = document.getElementById('hotelDestination').value;
+    var hotelPrices = document.getElementById('hotelPrices');
 
     if (!hotelDestination) {
-        alert("נא להזין יעד לחופשה.");
+        hotelPrices.innerHTML = "הזן יעד לחיפוש.";
         return;
     }
 
-    const hotelPrices = [
-        { name: 'מלון 1', price: 500 },
-        { name: 'מלון 2', price: 750 },
-        { name: 'מלון 3', price: 1000 }
+    var hotels = [
+        { name: "מלון א', price: 250 },
+        { name: "מלון ב', price: 300 },
+        { name: "מלון ג', price: 450 },
     ];
 
-    const list = document.getElementById('hotelPrices');
-    list.innerHTML = '';
-    hotelPrices.forEach(hotel => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${hotel.name} - ₪${hotel.price}`;
-        list.appendChild(listItem);
+    hotelPrices.innerHTML = '';
+    hotels.forEach(function(hotel) {
+        var li = document.createElement('li');
+        li.textContent = `${hotel.name} - ${hotel.price} ש"ח`;
+        hotelPrices.appendChild(li);
     });
-}
-function openModal() {
-    document.getElementById("barcodeModal").style.display = "block";
-    document.getElementById("barcodeImg").src = document.getElementById("barcode").src;
-}
-
-function closeModal() {
-    document.getElementById("barcodeModal").style.display = "none";
-}
-// פונקציה לפתיחת המודאל
-function openModal() {
-    document.getElementById("barcodeModal").style.display = "block";
-    document.getElementById("barcodeImg").src = document.getElementById("barcode").src;
-}
-
-// פונקציה לסגירת המודאל
-function closeModal() {
-    document.getElementById("barcodeModal").style.display = "none";
-}
-
-// סגירה בלחיצה מחוץ לתמונה
-window.onclick = function(event) {
-    let modal = document.getElementById("barcodeModal");
-    if (event.target === modal) {
-        closeModal();
-    }
 }
