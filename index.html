@@ -206,6 +206,15 @@
             });
 
             document.getElementById('hotelPrices').innerHTML = listHTML;
+            <!-- תמונת הברקוד -->
+<img id="barcode" src="image.png" alt="Barcode" style="width: 150px; cursor: pointer;" onclick="openModal()">
+
+<!-- החלון הקופץ -->
+<div id="barcodeModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="barcodeImg">
+</div>
+
         }
     </script>
 
