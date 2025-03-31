@@ -169,6 +169,68 @@
 
     <p>© 2025 by itapita. כל הזכויות שמורות.</p>
     <p>© itapitascompare can make mistakes.</p>
+    <!-- תמונת הברקוד -->
+<img id="barcode" src="https://example.com/barcode.png" alt="Barcode" onclick="openModal()">
+
+<!-- חלון מודל (Popup) -->
+<div id="myModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImg">
+</div>
+
+<style>
+    #barcode {
+        width: 150px;
+        cursor: pointer;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 600px;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 25px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    // פונקציה לפתיחת המודל עם התמונה המוגדלת
+    function openModal() {
+        var modal = document.getElementById("myModal");
+        var img = document.getElementById("barcode");
+        var modalImg = document.getElementById("modalImg");
+        modal.style.display = "block";
+        modalImg.src = img.src;
+    }
+
+    // פונקציה לסגירת המודל
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+</script>
+
 
     <script src="script.js"></script>
 </body>
