@@ -1,4 +1,9 @@
-<?xml version="1.0"?>
-<users>
-  <user>231A73391E5F4E2B6572F5BD8F51A16F</user>
-</users>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-33ERB6Y76C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-33ERB6Y76C');
+</script>
