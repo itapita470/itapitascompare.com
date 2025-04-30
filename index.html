@@ -1,3 +1,5 @@
+תוסיף לפה:
+
 <!DOCTYPE html>
 <html lang="he">
 <head>
@@ -13,36 +15,6 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-S5YWJC9H3C"></script>
     <script>
-        <script>
-  const button = document.getElementById('accessibility-button');
-  const menu = document.getElementById('accessibility-menu');
-
-  button.addEventListener('click', () => {
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-  });
-
-  function toggleClass(className) {
-    document.body.classList.toggle(className);
-    saveState();
-  }
-
-  function resetAccessibility() {
-    document.body.classList.remove('large-text', 'high-contrast', 'grayscale');
-    saveState();
-  }
-
-  function saveState() {
-    localStorage.setItem('accessibility-classes', document.body.className);
-  }
-
-  function loadState() {
-    const saved = localStorage.getItem('accessibility-classes');
-    if (saved) document.body.className = saved;
-  }
-
-  window.onload = loadState;
-</script>
-
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -124,17 +96,6 @@
     </style>
 </head>
 <body>
-
-<button id="accessibility-button" aria-label="תפריט נגישות">♿</button>
-
-<div id="accessibility-menu" style="display: none;">
-  <button onclick="toggleClass('large-text')">הגדלת טקסט</button>
-  <button onclick="toggleClass('high-contrast')">ניגודיות גבוהה</button>
-  <button onclick="toggleClass('grayscale')">שחור לבן</button>
-  <button onclick="resetAccessibility()">איפוס</button>
-</div>
-
-
 
     <h1>השוואת מחירים - טיסות, מלונות והמרות מטבע</h1>
 
