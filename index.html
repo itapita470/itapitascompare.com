@@ -95,6 +95,16 @@
 </head>
 <body>
 
+    <!-- כפתור נגישות ותפריט -->
+<button id="accessibility-button" aria-label="תפריט נגישות">♿</button>
+<div id="accessibility-menu">
+  <button onclick="toggleClass('large-text')">הגדלת טקסט</button>
+  <button onclick="toggleClass('high-contrast')">ניגודיות גבוהה</button>
+  <button onclick="toggleClass('grayscale')">שחור לבן</button>
+  <button onclick="resetAccessibility()">איפוס</button>
+</div>
+
+
     <h1>השוואת מחירים - טיסות, מלונות והמרות מטבע</h1>
 
     <img src="https://i.imghippo.com/files/PiY8435DVk.png" alt="good job" width="15" height="15">
