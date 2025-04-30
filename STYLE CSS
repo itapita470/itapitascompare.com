@@ -111,7 +111,7 @@ body.grayscale { filter: grayscale(100%); }
 
 #accessibility-button {
   position: fixed;
-  bottom: 20px;
+  bottom: 10px;
 }
 
 
