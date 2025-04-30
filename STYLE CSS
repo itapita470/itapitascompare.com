@@ -104,4 +104,44 @@ button {
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
+
+body.high-contrast { background-color: black; color: yellow; }
+body.large-text { font-size: 1.5em; }
+body.grayscale { filter: grayscale(100%); }
+
+#accessibility-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#accessibility-menu {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: none;
+  z-index: 1001;
+  text-align: right;
+}
+
+#accessibility-menu button {
+  display: block;
+  margin-bottom: 5px;
+  width: 100%;
+  padding: 6px;
+  font-size: 14px;
+}
+
 }
