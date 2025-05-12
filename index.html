@@ -1,225 +1,198 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-
-<link rel="icon" type="image/png" href="image/favicon.png" />
-
-<!-- מאפשר לגוגל לאנדקס ולעקוב אחרי קישורים -->
-<meta name="robots" content="index, follow">
-
-<!-- תיאור לאתר לשיפור SEO -->
-<meta name="description" content="אתר להשוואת מחירים - טיסות, מלונות והמרת מטבע בצורה פשוטה ונוחה.">
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024"> 
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S5YWJC9H3C"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-S5YWJC9H3C');
-    </script>
-
-    <title>השוואת מחירים - טיסות, מלונות והמרות מטבע</title>
-    <p>מומלץ לפתיחה במחשב או מצב desktop</p>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: #ffecb3;
-            min-width: 1024px;
-            overflow-x: auto;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 800px;
-            margin: auto;
-            border: 3px solid #ff5733;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            background-color: #ff5733;
-            color: white;
-            cursor: pointer;
-        }
-        h1, h2 {
-            color: #ff5733;
-        }
-        .logo-container {
-            position: absolute;
-            top: 10%;
-            left: 10px;
-            width: 60px;
-            z-index: 10;
-        }
-        .logo-container img {
-            width: 140%;
-            height: auto;
-        }
-        .image-container {
-            position: absolute;
-            top: 30%;
-            right: 0;
-            width: 200px;
-            height: auto;
-            z-index: 5;
-        }
-        .image-container img {
-            width: 60%;
-            height: auto;
-        }
-        @media only screen and (min-width: 1024px) {
-            .container {
-                max-width: 900px;
-                padding: 40px;
-            }
-            .logo-container {
-                width: 80px;
-                top: 5%;
-            }
-            .image-container {
-                width: 250px;
-                top: 25%;
-            }
-        }
-    </style>
+  <link rel="icon" type="image/png" href="image/favicon.png" />
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="אתר להשוואת מחירים - טיסות, מלונות והמרת מטבע בצורה פשוטה ונוחה.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1024">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S5YWJC9H3C"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S5YWJC9H3C');
+  </script>
+  <title>השוואת מחירים - טיסות, מלונות והמרות מטבע</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #ffecb3;
+      min-width: 1024px;
+      overflow-x: auto;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 800px;
+      margin: auto;
+      border: 3px solid #ff5733;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #ff5733;
+      color: white;
+      cursor: pointer;
+    }
+    h1, h2 {
+      color: #ff5733;
+    }
+    .logo-container {
+      position: absolute;
+      top: 10%;
+      left: 10px;
+      width: 60px;
+      z-index: 10;
+    }
+    .logo-container img {
+      width: 140%;
+      height: auto;
+    }
+    .image-container {
+      position: absolute;
+      top: 30%;
+      right: 0;
+      width: 200px;
+      height: auto;
+      z-index: 5;
+    }
+    .image-container img {
+      width: 60%;
+      height: auto;
+    }
+    @media only screen and (min-width: 1024px) {
+      .container {
+        max-width: 900px;
+        padding: 40px;
+      }
+      .logo-container {
+        width: 80px;
+        top: 5%;
+      }
+      .image-container {
+        width: 250px;
+        top: 25%;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <h1>השוואת מחירים - טיסות, מלונות והמרות מטבע</h1>
+<h1>השוואת מחירים - טיסות, מלונות והמרות מטבע</h1>
 
-    <img src="https://i.imghippo.com/files/PiY8435DVk.png" alt="good job" width="15" height="15">
+<img src="https://i.imghippo.com/files/PiY8435DVk.png" alt="good job" width="15" height="15">
 
-    <div class="logo-container">
-        <a href="https://itapita470.github.io/itapitascompare.com" target="_blank">
-            <img src="https://i.imghippo.com/files/NE7223qrs.png" alt="Logo">
-        </a>
-    </div>
+<div class="logo-container">
+  <a href="https://itapita470.github.io/itapitascompare.com" target="_blank">
+    <img src="https://i.imghippo.com/files/NE7223qrs.png" alt="Logo">
+  </a>
+</div>
 
-    <div class="image-container">
-        <a href="https://sites.google.com/view/the-top-10-slides/home?authuser=2" target="_blank">
-            <img src="https://lh3.googleusercontent.com/fife/ALs6j_HnCrLJSXI9qiQXfmNyzmdKMyGWcjRnjF4iMPAjyIqZJXtmHofrlReAR8CwuJEQ4_FWyHKSbYiOd1f2BXNY1zzu7yf0TAVDaKbslDUSgToMqK2N8rZHQbU4jimQ37oXHhli2o3TM_CPCKoSBMJ6nIEBxbH5AtfL__o0tnbnSb2djcuhqx8PnRqUsBLIANp-aOZJnaOI23JTxt1VQc6l7EtESxA8UQyzMENDzr558ewOt1rITkO-cd1FBSqGkdDs69Sanyjo0nUye5H9gWVCyBHFbkqceaECWuYSc3Pnl2PD2Bc0hwRoixqVoc_RR7U3tWuZIRRrCMOdeBwIvW1mL-Fg_ZX2SkTutyrwhv6oOtT9_erM4PN38bmFT6SCtPVw3E1NeveydfYVmuuTMFVh-0I23sC6TdSvtW0Qk5VUvnTefxL9sHdNY7Qo6Re5xMV-EIxZkCv2gBrKfXkqHtqGBcVeZdUxwDw5nkXsIWnYM6MOohBuqRgnBh5fJTtWrOFOMC3yLuwEOwQp5SNKidRHkDC77wkH-M69VQAv11vYWH_MB9N6V3dVApBqTRUdf8WO0GD-nKmaODF0y7p2JYIUjmiXE4V6pwK5z5me5OTj-SDg21G5L7U6xSVA-8_2gNV03JMsOKfqhVpGY3V7xpE25J31WDLp9Km9VSOzOAA_vOS5Vnhhqhfzu9RPAZjPJj8RSvd0mNr87-5INod6q5JerjU_VV7tAhm_RUpb4COJ_ez5yx5Ja6TTjNkZPYYj3Nc-lop1t2SlAAhy3g0D-IUVzRNoq1L-J-BkXoGejr_a1vOhDu6eCNyLVdNPJwtoQRGNWQvUkyeuyiRp0A6hxo1S4EAbyajnvaEYHCl_jDV4zrA6TyQ_tdmgM2q9yity0AqkzFTBtIayMv6R0y0Ug5TuyujJwVYvf-kN87xPG7VGIBrHDchLsXfYzyzl_j096Vj4wsLZy03Hl2w0CDoF5WpVt6lsDEVGZrnarxfCinzwkLNj_LkUfJrQHaSJ08blxmkWEsHTEAosrstpo8_JfadfRvafSKreCuW4tIjDFZXuOZhWlld9vnu6JlLGIlO95uZL96G-4tnvfsgXjs0PjT8bL1A-SvoLyWdOmg8XLhDi8OGX4S5XeoQr8X5wbfEZHEGld-G136pZvC0V1VYeYEq5lRptDGONwK9m_JXqbROZIAM5gfeLZiWkUwFMQyIGT8XW2DvojFXRHbilmv8d-fmlETrBfHBzRYtSHQqVUJ34pU5WQTsSqezdbksjOpitXpry8jmJNuJuYgnAxhsKgqkXKeG-sj1yMGArRRSh2f28ZavIoI3h94koJFJZ4YT2IDVMc9k1G9TfX49hy4-OzeqCd3lJqqc9pwU7v9V4_T_d37p0aCz0tIzZQlGduR8zaK9OcpaNDxqqZ5CASEiGyCMJMJtmQki8v-ZOjQCKdfUtm6GmUHsvmiJy0LMLPV3yYhATu_7ICwSpKJgxH9tuFya7rdtenGkj9Fje5k0IrC4bJyYgeLQEWV7miIUcSJWbqZ34uepnbUcZYPtrvokmlahYCQw9yA7EcXV-02wLnmDKhpF2ibHaiTpDBK8eUhaFChswwMocX7LlRbmLux1TgAAbayQcj7HVWLtCnwM2aMZxsNmZkNCNtVcnSSIjTG-REz_Aqq-y3SYCOux2IE0eeLcNkMRn" alt="תמונה בצד">
-        </a>
-    </div>
+<div class="image-container">
+  <a href="https://sites.google.com/view/the-top-10-slides/home?authuser=2" target="_blank">
+    <img src="https://lh3.googleusercontent.com/fife/ALs6j_HnCrLJSXI9qiQXfmNyzmdKMyGWcjRnjF4iMPAjyIqZJXtmHofrlReAR8CwuJEQ4_FWyHKSbYiOd1f2BXNY1zzu7yf0TAVDaKbslDUSgToMqK2N8rZHQbU4jimQ37oXHhli2o3TM_CPCKoSBMJ6nIEBxbH5AtfL__o0tnbnSb2djcuhqx8PnRqUsBLIANp-aOZJnaOI23JTxt1VQc6l7EtESxA8UQyzMENDzr558ewOt1rITkO-cd1FBSqGkdDs69Sanyjo0nUye5H9gWVCyBHFbkqceaECWuYSc3Pnl2PD2Bc0hwRoixqVoc_RR7U3tWuZIRRrCMOdeBwIvW1mL-Fg_ZX2SkTutyrwhv6oOtT9_erM4PN38bmFT6SCtPVw3E1NeveydfYVmuuTMFVh-0I23sC6TdSvtW0Qk5VUvnTefxL9sHdNY7Qo6Re5xMV-EIxZkCv2gBrKfXkqHtqGBcVeZdUxwDw5nkXsIWnYM6MOohBuqRgnBh5fJTtWrOFOMC3yLuwEOwQp5SNKidRHkDC77wkH-M69VQAv11vYWH_MB9N6V3dVApBqTRUdf8WO0GD-nKmaODF0y7p2JYIUjmiXE4V6pwK5z5me5OTj-SDg21G5L7U6xSVA-8_2gNV03JMsOKfqhVpGY3V7xpE25J31WDLp9Km9VSOzOAA_vOS5Vnhhqhfzu9RPAZjPJj8RSvd0mNr87-5INod6q5JerjU_VV7tAhm_RUpb4COJ_ez5yx5Ja6TTjNkZPYYj3Nc-lop1t2SlAAhy3g0D-IUVzRNoq1L-J-BkXoGejr_a1vOhDu6eCNyLVdNPJwtoQRGNWQvUkyeuyiRp0A6hxo1S4EAbyajnvaEYHCl_jDV4zrA6TyQ_tdmgM2q9yity0AqkzFTBtIayMv6R0y0Ug5TuyujJwVYvf-kN87xPG7VGIBrHDchLsXfYzyzl_j096Vj4wsLZy03Hl2w0CDoF5WpVt6lsDEVGZrnarxfCinzwkLNj_LkUfJrQHaSJ08blxmkWEsHTEAosrstpo8_JfadfRvafSKreCuW4tIjDFZXuOZhWlld9vnu6JlLGIlO95uZL96G-4tnvfsgXjs0PjT8bL1A-SvoLyWdOmg8XLhDi8OGX4S5XeoQr8X5wbfEZHEGld-G136pZvC0V1VYeYEq5lRptDGONwK9m_JXqbROZIAM5gfeLZiWkUwFMQyIGT8XW2DvojFXRHbilmv8d-fmlETrBfHBzRYtSHQqVUJ34pU5WQTsSqezdbksjOpitXpry8jmJNuJuYgnAxhsKgqkXKeG-sj1yMGArRRSh2f28ZavIoI3h94koJFJZ4YT2IDVMc9k1G9TfX49hy4-OzeqCd3lJqqc9pwU7v9V4_T_d37p0aCz0tIzZQlGduR8zaK9OcpaNDxqqZ5CASEiGyCMJMJtmQki8v-ZOjQCKdfUtm6GmUHsvmiJy0LMLPV3yYhATu_7ICwSpKJgxH9tuFya7rdtenGkj9Fje5k0IrC4bJyYgeLQEWV7miIUcSJWbqZ34uepnbUcZYPtrvokmlahYCQw9yA7EcXV-02wLnmDKhpF2ibHaiTpDBK8eUhaFChswwMocX7LlRbmLux1TgAAbayQcj7HVWLtCnwM2aMZxsNmZkNCNtVcnSSIjTG-REz_Aqq-y3SYCOux2IE0eeLcNkMRn" alt="תמונה בצד">
+  </a>
+</div>
 
-    <div class="container">
-        <h2>המרת מטבע</h2>
-        <input type="number" id="amount" placeholder="הזן סכום" />
-        <select id="currency">
-            <option value="usd">דולר ($)</option>
-            <option value="eur">יורו (€)</option>
-        </select>
-        <button onclick="convertCurrency()">המר</button>
-        <p id="result"></p>
-        <img src="https://i.imghippo.com/files/PiY8435DVk.png" alt="תמונה" style="width: 15%; margin-top: 20px;">
-    </div>
+<div class="container">
+  <h2>המרת מטבע</h2>
+  <input type="number" id="amount" placeholder="הזן סכום" />
+  <select id="currency">
+    <option value="usd">דולר ($)</option>
+    <option value="eur">יורו (€)</option>
+  </select>
+  <button onclick="convertCurrency()">המר</button>
+  <p id="result"></p>
+</div>
 
-    <div class="container">
-        <h2>חיפוש טיסות</h2>
-        <input type="text" id="destination" placeholder="בחר יעד" />
-        <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1" />
-        <button onclick="calculateFlights()">חשב מחירי טיסות</button>
-        <p id="finalPrice"></p>
-        <img src="https://i.imghippo.com/files/PiY8435DVk.png" alt="תמונה" style="width: 15%; margin-top: 20px;">
-    </div>
+<div class="container">
+  <h2>חיפוש טיסות</h2>
+  <input type="text" id="destination" placeholder="בחר יעד" />
+  <input type="number" id="passengerCount" placeholder="כמות נוסעים" min="1" />
+  <button onclick="calculateFlights()">חשב מחירי טיסות</button>
+  <p id="finalPrice"></p>
+</div>
 
-    <div class="container">
-        <h2>חיפוש לינה</h2>
-        <input type="text" id="hotelDestination" placeholder="בחר יעד לחופשה" />
-        <button onclick="findHotel()">חפש לינה</button>
-        <ul id="hotelPrices"></ul>
-        <img src="https://i.imghippo.com/files/PiY8435DVk.png" alt="תמונה" style="width: 15%; margin-top: 20px;">
-    </div>
+<div class="container">
+  <h2>חיפוש לינה</h2>
+  <input type="text" id="hotelDestination" placeholder="בחר יעד לחופשה" />
+  <button onclick="findHotel()">חפש לינה</button>
+  <ul id="hotelPrices"></ul>
+</div>
 
-    <p>© 2025 by itapita. כל הזכויות שמורות.</p>
-    <p>© itapitascompare can make mistakes.</p>
+<p>© 2025 by itapita. כל הזכויות שמורות.</p>
+<p>© itapitascompare can make mistakes.</p>
 
-    <script>
-        async function fetchExchangeRates() {
-            let apiKey = '75bf0f0b53c295e7ac893335';
-            try {
-                let response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
-                let data = await response.json();
-                return { usd: data.conversion_rates.ILS, eur: data.conversion_rates.ILS / data.conversion_rates.EUR };
-            } catch (error) {
-                console.error("שגיאה בעדכון שערי המטבע. משתמשים בשערים קבועים.");
-                return { usd: 3.56, eur: 3.73 };
-            }
-        }
+<script>
+  async function fetchExchangeRates() {
+    let apiKey = '75bf0f0b53c295e7ac893335';
+    try {
+      let response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
+      let data = await response.json();
+      return {
+        usd: data.conversion_rates.ILS,
+        eur: data.conversion_rates.ILS / data.conversion_rates.EUR
+      };
+    } catch (error) {
+      console.error("שגיאה בעדכון שערי המטבע. משתמשים בשערים קבועים.");
+      return { usd: 3.56, eur: 3.73 };
+    }
+  }
 
-        async function convertCurrency() {
-            const amount = document.getElementById('amount').value;
-            const currency = document.getElementById('currency').value;
+  async function convertCurrency() {
+    const amount = document.getElementById('amount').value;
+    const currency = document.getElementById('currency').value;
+    if (amount === "") {
+      alert("נא להזין סכום להמרה.");
+      return;
+    }
+    const rates = await fetchExchangeRates();
+    let result = currency === 'usd' ? amount * rates.usd : amount * rates.eur;
+    document.getElementById('result').innerText = `${amount} ${currency === 'usd' ? 'דולר' : 'יורו'} שווה ${result.toFixed(2)} ש"ח`;
+  }
 
-            if (amount === "") {
-                alert("נא להזין סכום להמרה.");
-                return;
-            }
+  function calculateFlights() {
+    const destination = document.getElementById('destination').value;
+    const passengerCount = document.getElementById('passengerCount').value;
+    if (!destination || !passengerCount) {
+      alert("נא להזין יעד ומספר נוסעים.");
+      return;
+    }
+    const basePrice = 1000;
+    const totalPrice = basePrice * passengerCount;
+    document.getElementById('finalPrice').innerText = `מחיר טיסות ל-${destination} עבור ${passengerCount} נוסעים: ₪${totalPrice}`;
+  }
 
-            const rates = await fetchExchangeRates();
-            let result = 0;
+  function findHotel() {
+    const destination = document.getElementById('hotelDestination').value;
+    const hotelPrices = {
+      "תל אביב": ["₪400 ללילה", "₪520 ללילה", "₪600 ללילה"],
+      "ירושלים": ["₪350 ללילה", "₪480 ללילה", "₪530 ללילה"],
+      "אילת": ["₪500 ללילה", "₪620 ללילה", "₪750 ללילה"]
+    };
+    const list = document.getElementById('hotelPrices');
+    list.innerHTML = "";
 
-            if (currency === 'usd') {
-                result = amount * rates.usd;
-                document.getElementById('result').innerText = `${amount} דולר שווה ${result} ש"ח`;
-            } else if (currency === 'eur') {
-                result = amount * rates.eur;
-                document.getElementById('result').innerText = `${amount} יורו שווה ${result} ש"ח`;
-            }
-        }
-
-        function calculateFlights() {
-            const destination = document.getElementById('destination').value;
-            const passengerCount = document.getElementById('passengerCount').value;
-
-            if (!destination || !passengerCount) {
-                alert("נא להזין יעד ומספר נוסעים.");
-                return;
-            }
-
-            const basePrice = 1000;
-            const totalPrice = basePrice * passengerCount;
-
-            document.getElementById('finalPrice').innerText = `מחיר טיסות ל-${destination} עבור ${passengerCount} נוסעים: ₪${totalPrice}`;
-        }
-
-        function findHotel() {
-            const hotelDestination = document.getElementById('hotelDestination').value;
-
-            if (!hotelDestination) {
-                alert("נא להזין יעד לחופשה.");
-                return;
-            }
-
-            const hotelPrices = [
-                { name: "מלון דן תל אביב", price: 500 },
-                { name: "מלון מצפה רמון", price: 450 },
-                { name: "מלון ירושלים גולדה", price: 550 }
-            ];
-
-            let listHTML = '';
-            hotelPrices.forEach(hotel => {
-                listHTML += `<li>${hotel.name} - ₪${hotel.price}</li>`;
-            });
-
-            document.getElementById('hotelPrices').innerHTML = listHTML;
-
-<script> window.chtlConfig = { chatbotId: "3491158918" } </script>
-<script async data-id="3491158918" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
-        }
-    </script>
+    if (destination in hotelPrices) {
+      hotelPrices[destination].forEach(price => {
+        const li = document.createElement('li');
+        li.innerText = `${destination}: ${price}`;
+        list.appendChild(li);
+      });
+    } else {
+      list.innerHTML = `<li>לא נמצאו מחירים ליעד "${destination}".</li>`;
+    }
+  }
+</script>
 
 </body>
 </html>
